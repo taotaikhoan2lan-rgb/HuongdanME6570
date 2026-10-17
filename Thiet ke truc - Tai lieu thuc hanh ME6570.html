@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ME6570 – Thực tập thiết kế chi tiết máy | Thiết kế chi tiết trục (Mục 3.1–3.4)</title>
+<style>
+:root{--navy:#16365C;--navy2:#1F4E79;--acc:#C4690A;--acc2:#E8830C;--acc-bg:#FDF1E2;
+ --bg:#F2F6FA;--line:#C9D6E3;--ink:#1B2A3A;--grey:#5A6B7C;--ok:#1E7B34;--warn:#B3261E;--lt:#E8EFF7}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:"Segoe UI",Roboto,Arial,sans-serif;
+ font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{display:flex;max-width:1320px;margin:0 auto;align-items:flex-start}
+/* --- sidebar --- */
+nav{width:266px;flex:0 0 266px;position:sticky;top:0;height:100vh;overflow-y:auto;
+ background:var(--navy);padding:20px 16px 40px}
+nav .ttl{color:#fff;font-size:16px;font-weight:700;line-height:1.35;margin-bottom:4px}
+nav .sub{color:var(--acc2);font-size:12.5px;font-weight:700;margin-bottom:14px}
+nav a{display:block;color:#C9DAEC;text-decoration:none;font-size:13px;padding:5px 9px;
+ border-left:3px solid transparent;border-radius:0 4px 4px 0;margin-bottom:1px}
+nav a:hover{background:#1F4E79;color:#fff}
+nav a.on{background:#1F4E79;color:#fff;border-left-color:var(--acc2);font-weight:600}
+nav a.hd{color:#7E9CBE;font-size:11.5px;font-weight:700;letter-spacing:.6px;margin-top:10px;
+ text-transform:uppercase;pointer-events:none}
+/* --- main --- */
+main{flex:1;min-width:0;padding:26px 34px 90px}
+.hero{background:var(--navy);color:#fff;border-radius:8px;padding:26px 30px;margin-bottom:20px}
+.hero .eyebrow{color:var(--acc2);font-size:13px;font-weight:700;letter-spacing:1px}
+.hero h1{font-size:30px;line-height:1.2;margin:6px 0 10px}
+.hero p{color:#C9DAEC;font-size:14px;line-height:1.7}
+.hero .bar{width:64px;height:4px;background:var(--acc2);margin:12px 0}
+.hero .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}
+.hero .grid div{background:#1F4E79;border-radius:5px;padding:9px 12px}
+.hero .grid b{display:block;color:#fff;font-size:13px;margin-bottom:2px}
+.hero .grid span{color:#B9CDE4;font-size:12.5px}
+h2{font-size:21px;color:var(--navy);margin:30px 0 4px;padding-bottom:7px;border-bottom:2px solid var(--acc2)}
+h2 .no{color:var(--acc2);font-weight:700;margin-right:7px}
+h3{font-size:16.5px;color:var(--navy2);margin:18px 0 7px}
+h4{font-size:14.5px;color:var(--navy);margin:13px 0 5px}
+p{margin:7px 0;color:#2E3F52}
+ul,ol{margin:7px 0 7px 22px;color:#2E3F52}
+li{margin-bottom:4px}
+.box{background:#fff;border:1px solid var(--line);border-left:5px solid var(--navy2);
+ border-radius:6px;padding:13px 16px;margin:11px 0}
+.box.lft{border-left-color:var(--acc2)}
+.box.wrn{border-left-color:var(--warn)}
+.box.acc{background:var(--acc-bg);border-color:#F0D5B0;border-left-color:var(--acc)}
+.box.navy{background:var(--navy);border-color:var(--navy);color:#fff}
+.box.navy p,.box.navy li{color:#E3ECF5}
+.box.navy h3,.box.navy h4{color:#BFD6EC}
+.f{font-family:Consolas,"Courier New",monospace;font-size:14px;color:var(--navy);font-weight:700;
+ background:#EEF3F9;border-radius:4px;padding:9px 12px;margin:8px 0;white-space:pre-wrap;
+ line-height:1.55;overflow-x:auto}
+.f.big{font-size:16px}
+.f.res{background:#EDF7EE;border-left:3px solid var(--ok)}
+.f.warn{background:#FBECEA;border-left:3px solid var(--warn);color:var(--warn)}
+/* ==== equation chuan hoa (MathML Core) - hien thi nhu equation trong Word/PowerPoint ==== */
+.f:has(math){white-space:normal}
+.f math{font-family:"Cambria Math","Latin Modern Math","STIX Two Math",Georgia,serif;
+  font-size:1.04em}
+.f math[display="block"]{display:block math;margin:.14em 0;text-align:center}
+.f math[display="inline"]{display:inline math}
+.f math mtext{font-family:"Segoe UI",Arial,sans-serif;font-weight:400;font-size:.94em}
+.f .eq.cont{margin-left:2.4em}
+.f .eq.cont math[display="block"]{text-align:left}
+.f .cm{font-family:"Segoe UI",Arial,sans-serif;font-size:12.5px;font-weight:400;
+  font-style:italic;color:var(--grey);margin:2px 0 6px;line-height:1.4}
+.f.warn .cm{color:var(--warn)}
+.note{font-size:13px;color:var(--grey);font-style:italic;margin-top:6px}
+/* ==== equation chuan hoa (MathML Core) - cung kieu equation Word/PowerPoint ==== */
+math{font-family:"Cambria Math","Latin Modern Math","STIX Two Math",Georgia,serif;
+  font-size:1.02em}
+math[display="inline"]{display:inline math}
+math[display="block"]{display:block math}
+math mtext{font-family:"Segoe UI",Arial,sans-serif;font-weight:400;font-size:.94em}
+td math,th math{font-size:1.06em}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13.5px;background:#fff}
+th{background:var(--navy);color:#fff;padding:7px 9px;text-align:left;font-weight:600;font-size:13px}
+td{border:1px solid var(--line);padding:6px 9px;vertical-align:top;line-height:1.45}
+tr:nth-child(even) td{background:#F7FAFD}
+td b{color:var(--navy)}
+/* --- bang nam trong khuc nen toi: nen lai, chu sang, duong vien nhat --- */
+.box.navy table,.box.wrn table{background:transparent;margin:10px 0}
+.box.navy th,.box.wrn th{background:rgba(0,0,0,.30);color:#FFFFFF;
+  border-color:rgba(255,255,255,.22)}
+.box.navy td,.box.wrn td{background:rgba(255,255,255,.08);color:#EDF3F9;
+  border-color:rgba(255,255,255,.20)}
+.box.navy tr:nth-child(even) td,.box.wrn tr:nth-child(even) td{
+  background:rgba(255,255,255,.14)}
+.box.navy td b,.box.wrn td b{color:#FFFFFF}
+/* --- dong trich dan nguon --- */
+.src{font-size:12px;color:#64748B;margin:6px 0 2px;padding-left:22px;line-height:1.5;
+  position:relative}
+.src::before{content:"§";position:absolute;left:2px;top:6px;width:14px;height:14px;
+  background:var(--acc2);color:#fff;border-radius:3px;font-size:10px;font-weight:800;
+  line-height:14px;text-align:center}
+.src b{color:var(--navy);font-weight:700}
+.src .pg,.pg{background:#E8EFF7;border:1px solid #D3E0EE;border-radius:3px;
+  padding:0 6px;font-weight:700;color:var(--navy);white-space:nowrap;
+  font-size:11.5px}
+td.sc{font-size:12px;color:#4A5C6B;line-height:1.4}
+td.sc .pg{font-size:11px}
+code{font-family:Consolas,monospace;color:var(--navy);font-weight:600}
+.gr{display:grid;gap:13px}
+.g2{grid-template-columns:1fr 1fr}
+.g3{grid-template-columns:1fr 1fr 1fr}
+.g4{grid-template-columns:repeat(4,1fr)}
+.step{background:#fff;border:1px solid var(--line);border-radius:6px;padding:12px 15px}
+.step .h{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:5px}
+.step p{font-size:13px;margin:3px 0;color:var(--grey)}
+.tagx{display:inline-block;font-size:11px;font-weight:700;padding:1px 7px;border-radius:8px;
+ color:#fff;margin-left:6px;vertical-align:middle}
+.tagx.n1{background:var(--acc2)} .tagx.n2{background:var(--navy2)} .tagx.n3{background:var(--grey)}
+.chk{background:#fff;border:1px solid var(--line);border-radius:6px;padding:12px 15px}
+.chk label{display:block;font-size:14px;margin:6px 0;color:#2E3F52;cursor:pointer}
+.chk input{margin-right:8px;width:15px;height:15px;vertical-align:-2px;accent-color:var(--acc2)}
+.flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:12px 0;font-size:13px}
+.flow span{background:var(--navy);color:#fff;padding:4px 10px;border-radius:4px;font-weight:600}
+.flow i{color:var(--acc2);font-style:normal;font-weight:700}
+hr{border:0;border-top:1px solid var(--line);margin:24px 0}
+.top{position:fixed;bottom:20px;right:22px;background:var(--navy);color:#fff;border:0;
+ border-radius:22px;padding:9px 17px;font-size:13px;cursor:pointer;z-index:50;font-family:inherit}
+.top:hover{background:var(--acc2)}
+@media print{nav,.top{display:none}main{padding:0}.box,table{page-break-inside:avoid}}
+@media (max-width:1000px){nav{display:none}.hero .grid,.g3,.g4{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<nav>
+  <div class="ttl">THIẾT KẾ CHI TIẾT<br>TRỤC</div>
+  <div class="sub">ME6570 · Mục 3.1 – 3.4</div>
+  <div class="hd">Bắt đầu</div>
+  <a href="#s0">0. Cách dùng tài liệu</a>
+  <a href="#s1">1. Số liệu đầu bài</a>
+  <a href="#s2">2. Quy trình tổng quan</a>
+  <div class="hd">Mục 3.1 – Thiết kế trục</div>
+  <a href="#s3">3.1.1 Chọn vật liệu</a>
+  <a href="#s4">3.1.2 Ø sơ bộ</a>
+  <a href="#s5">3.1.3 Phân tích lực</a>
+  <a href="#s6">3.1.4 Ø và chiều dài</a>
+  <a href="#s7">3.1.5 Định kết cấu</a>
+  <a href="#s8">3.1.6 Kiểm mỏi</a>
+  <a href="#s9">3.1.7 Kiểm tĩnh</a>
+  <a href="#s10">3.1.8 Kiểm cứng vững</a>
+  <div class="hd">Mục 3.2 – Ổ lăn</div>
+  <a href="#s11">3.2.1 Bố trí ổ</a>
+  <a href="#s12">3.2.2 Tải động · 3.2.3 Tải tĩnh</a>
+  <div class="hd">Tra cứu</div><a href="#s15b">19. Công thức – nguồn – trang</a>
+<div class="hd">Mục 3.3 – 3.4</div>
+  <a href="#s13">3.3 Tính chọn then</a>
+  <a href="#s14">3.4 Tính chọn khớp nối</a>
+  <div class="hd">Kết</div>
+  <a href="#s15">Bảng tra nhanh</a>
+  <a href="#s16">12 lỗi thường gặp</a>
+  <a href="#s17">Checklist nộp bài</a>
+  <div class="hd">Phần mềm</div>
+  <a href="#s18">Dựng mô hình trên Inventor</a>
+  <a href="#s19">Tài liệu tham khảo</a>
+</nav>
+
+<main>
+
+<div class="hero">
+  <div class="eyebrow">ME6570 · THỰC TẬP THIẾT KẾ CHI TIẾT MÁY · 1 TÍN CHỈ</div>
+  <h1>Thiết kế chi tiết trục</h1>
+  <div class="bar"></div>
+  <p>Tài liệu thực hành cho sinh viên học phần Thực tập thiết kế chi tiết máy.
+  Trình bày đúng thứ tự các mục 3.1 – 3.4 của đề cương: công thức, cách tra bảng,
+  bài tính mẫu có số, lỗi thường gặp và thao tác dựng mô hình trên Autodesk Inventor.</p>
+  <div class="grid">
+    <div><b>Đối tượng</b><span>SV ngành Cơ khí – Ô tô</span></div>
+    <div><b>Phạm vi</b><span>Mục 3.1 – 3.4, Chương 3 (2/6/18)</span></div>
+    <div><b>Phần mềm</b><span>Autodesk Inventor 2025 / 2026</span></div>
+  </div>
+</div>
+
+<!-- ============ 0 ============ -->
+<h2 id="s0"><span class="no">0.</span>Cách dùng tài liệu này</h2>
+
+<p>Làm <b>tuần tự</b>, không nhảy cóc, vì mỗi mục dùng kết quả của mục trước.</p>
+
+<div class="box lft">
+<h3>Quy tắc bắt buộc khi viết báo cáo</h3>
+<ul>
+<li>Mỗi bước phải ghi đủ ba dòng: <b>công thức</b> → <b>thay số</b> → <b>kết luận</b>. Thiếu một dòng là bị trừ điểm.</li>
+<li>Mọi số liệu thay số <b>phải kèm đơn vị</b>.</li>
+<li>Sau mỗi kết luận phải có dòng <b>"Kiểm tra ngược"</b> bằng một quan hệ độc lập.</li>
+<li>Đọc số liệu từ bảng phải ghi rõ <b>tên bảng</b> đã dùng.</li>
+<li>Tự làm trước, sau đó dùng bài tính mẫu trong tài liệu này để đối chiếu.</li>
+</ul>
+</div>
+
+<div class="box wrn">
+<h3>Hai điều cần lưu ý trước khi bắt đầu</h3>
+<p><b>(1) Điền số hiệu công thức và số trang theo giáo trình lớp đang dùng.</b>
+Tài liệu này nêu công thức và phép tính nhưng không ghi số hiệu công thức, số trang,
+vì các ấn phẩm dùng trong lớp có thể đánh số khác nhau. Hãy tra giáo trình [1] hoặc bài giảng [TL]
+để ghi vào báo cáo đúng số hiệu mà giảng viên yêu cầu.</p>
+<p><b>(2) Tự kiểm mô-men xoắn trên trục I trước khi tính tiếp.</b>
+Đọc bảng thông số các trục ở mục 1 và cảnh báo ngay dưới bảng — đây là chỗ nhiều bài làm sai nhất.
+Xem thêm mục <a href="#s15">bảng tra nhanh</a>.</p>
+</div>
+
+<!-- ============ 1 ============ -->
+<h2 id="s1"><span class="no">1.</span>Số liệu đầu bài</h2>
+
+<p>Ví dụ này lấy từ đề giao đồ án chi tiết máy mã <b>25-26.HKH-NCH.01</b> – thiết kế trạm dẫn động băng tải.</p>
+
+<table>
+<tr><th style="width:30%">Đại lượng</th><th style="width:22%">Ký hiệu</th><th>Giá trị</th></tr>
+<tr><td>Lực kéo băng tải</td><td>F</td><td>2 444 N</td></tr>
+<tr><td>Vận tốc băng tải</td><td>v</td><td>2,46 m/s</td></tr>
+<tr><td>Đường kính tang</td><td>D</td><td>350 mm</td></tr>
+<tr><td>Thời hạn phục vụ</td><td>L<sub>h</sub></td><td>24 000 giờ</td></tr>
+<tr><td>Số ca làm việc</td><td>—</td><td>2 ca / ngày</td></tr>
+<tr><td>Đặc tính làm việc</td><td>K<sub>qt</sub></td><td>170% – tải không đổi, dao động mạnh</td></tr>
+<tr><td>Bộ truyền trong hộp giảm tốc</td><td>—</td><td>Bánh răng trụ răng thẳng</td></tr>
+</table>
+
+<h3>Bảng thông số các trục — đây là bảng bạn làm việc suốt buổi</h3>
+
+<table>
+<tr><th>Thông số</th><th>Động cơ</th><th>Trục I<br>(khớp nối)</th><th>Trục I<br>(bánh răng)</th><th>Trục II</th><th>Trục làm việc<br>(tang băng tải)</th></tr>
+<tr><td>Tỷ số truyền u</td><td>1</td><td colspan="2" style="text-align:center">2,5</td><td colspan="2" style="text-align:center">2,447</td></tr>
+<tr><td>Số vòng quay n (v/p)</td><td>970</td><td>970</td><td><b>388</b></td><td><b>388</b></td><td>158,5</td></tr>
+<tr><td>Công suất P (kW)</td><td>8,373</td><td>8,315</td><td><b>8,010</b></td><td><b>8,010</b></td><td>7,318</td></tr>
+<tr><td><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>T</mi></mrow></math> (N·mm)</td><td>82 435</td><td>81 864</td><td><b>197 153</b></td><td><b>197 153</b></td><td>440 877</td></tr>
+</table>
+
+<div class="box">
+<h4>Kiểm chứng bảng trên bằng công thức mô-men xoắn</h4>
+<div class="f"><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>T</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mrow><mn>9</mn><mspace width="0.15em"/><mn>550</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>P</mi></mrow><mrow><mi>n</mi></mrow></mfrac></mrow></math></div><div class="cm">Đơn vị: T [N·mm], P [kW], n [vòng/phút]</div><div class="src"><b>[NHL]</b> §5.4 <span class="pg">tr. 100</span> — công thức mô-men xoắn tính từ công suất và số vòng/phút.</div>
+  </div>
+<div class="f sm"><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mfrac><mrow><mrow><mn>9</mn><mspace width="0.15em"/><mn>550</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>8</mn><mn>,373</mn></mrow></mrow><mrow><mrow><mn>970</mn></mrow></mrow></mfrac><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>82</mn><mspace width="0.15em"/><mn>435</mn></mrow><mo lspace="0.17em" rspace="0.17em">✔</mo></mrow></math></div><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mfrac><mrow><mrow><mn>9</mn><mspace width="0.15em"/><mn>550</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>8</mn><mn>,315</mn></mrow></mrow><mrow><mrow><mn>970</mn></mrow></mrow></mfrac><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>81</mn><mspace width="0.15em"/><mn>864</mn></mrow><mo lspace="0.17em" rspace="0.17em">✔</mo></mrow></math></div><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mfrac><mrow><mrow><mn>9</mn><mspace width="0.15em"/><mn>550</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>8</mn><mn>,010</mn></mrow></mrow><mrow><mrow><mn>388</mn></mrow></mrow></mfrac><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>197</mn><mspace width="0.15em"/><mn>153</mn></mrow><mo lspace="0.17em" rspace="0.17em">✔</mo></mrow></math></div><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mfrac><mrow><mrow><mn>9</mn><mspace width="0.15em"/><mn>550</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>7</mn><mn>,318</mn></mrow></mrow><mrow><mrow><mn>158</mn><mn>,5</mn></mrow></mrow></mfrac><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>440</mn><mspace width="0.15em"/><mn>877</mn></mrow><mo lspace="0.17em" rspace="0.17em">✔</mo></mrow></math></div><div class="src"><b>[NHL]</b> §5.4 <span class="pg">tr. 100</span> — bảng thông số truyền động, dùng để kiểm chứng ngược từng hàng.</div>
+  </div>
+<div class="note">Nếu bạn điền một số vào bảng mà công thức này không ra đúng số đó, thì số đó đã sai.
+Luôn kiểm bằng công thức trước khi đi tiếp.</div>
+</div>
+
+<div class="box warn">
+<h4>⚠ Cạm bẫy thường gặp ở chính bảng này</h4>
+<p>Trục I quay <b>hai tốc độ khác nhau</b> trên cùng một trục: 970 v/p ở khớp nối (đầu vào hộp)
+và 388 v/p tại bánh răng (đầu ra hộp). Vì P gần như không đổi nên <b>mô-men xoắn thay đổi theo tỉ lệ nghịch
+với số vòng quay</b>: nhỏ ở khớp nối, lớn ở bánh răng. Khi thiết kế trục phải lấy <b>T lớn nhất</b>
+tại vị trí có mô-men uốn.</p>
+</div>
+
+<!-- ============ 2 ============ -->
+<h2 id="s2"><span class="no">2.</span>Quy trình tổng quan</h2>
+
+<div class="flow">
+<span>3.1.1 Vật liệu</span><i>→</i><span>3.1.2 Ø sơ bộ</span><i>→</i>
+<span>3.1.3 Lực</span><i>→</i><span>3.1.4 Ø &amp; chiều dài</span><i>→</i>
+<span>3.1.5 Kết cấu</span><i>→</i><span>3.1.6 Mỏi</span><i>→</i>
+<span>3.1.7 Tĩnh</span><i>→</i><span>3.1.8 Cứng vững</span><i>→</i>
+<span>3.2.1 Bố trí ổ</span><i>→</i><span>3.2.2 Tải động</span><i>→</i>
+<span>3.2.3 Tải tĩnh</span><i>→</i><span>3.3 Then</span><i>→</i><span>3.4 Khớp nối</span>
+</div>
+
+<div class="gr g4">
+<div class="step"><div class="h">3.1.1 Chọn vật liệu</div><p>Tra bảng vật liệu trục → <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>σ</mi></mrow><mrow><mi>b</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mo fence="true" stretchy="true">[</mo><mrow><mi>σ</mi></mrow><mo fence="true" stretchy="true">]</mo></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mo fence="true" stretchy="true">[</mo><mrow><mi>τ</mi></mrow><mo fence="true" stretchy="true">]</mo></mrow></mrow></math></p></div>
+<div class="step"><div class="h">3.1.2 Ø sơ bộ</div><p>Sức bền xoắn tĩnh: <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>d</mi><mo lspace="0.17em" rspace="0.17em">≥</mo><mroot><mrow><mfrac><mrow><mrow><mn>16</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>T</mi></mrow><mrow><mrow><mi>π</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mo fence="true" stretchy="true">[</mo><mrow><mi>τ</mi></mrow><mo fence="true" stretchy="true">]</mo></mrow></mrow></mrow></mfrac></mrow><mrow><mtext>3</mtext></mrow></mroot></mrow></math></p></div>
+<div class="step"><div class="h">3.1.3 Phân tích lực</div><p>Lực vòng, hướng tâm, dọc trục → sơ đồ lực → phản lực gối</p></div>
+<div class="step"><div class="h">3.1.4 Ø và chiều dài</div><p>M_td → Ø thiết kế; chiều dài moay – ơ và các đoạn</p></div>
+<div class="step"><div class="h">3.1.5 Định kết cấu</div><p>Bố trí chi tiết, kiểm tra khả năng gia công</p></div>
+<div class="step"><div class="h">3.1.6 Mỏi</div><p>Hệ số an toàn <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mrow><mo fence="true" stretchy="true">[</mo><mrow><mi>s</mi></mrow><mo fence="true" stretchy="true">]</mo></mrow><mo lspace="0.17em" rspace="0.17em">≥</mo><mrow><mn>2</mn><mn>,5</mn></mrow><mo lspace="0.17em" rspace="0.17em">÷</mo><mrow><mn>3</mn></mrow></mrow></math></p></div>
+<div class="step"><div class="h">3.1.7 Tĩnh</div><p>Ứng suất tĩnh tại mặt cắt có rãnh then</p></div>
+<div class="step"><div class="h">3.1.8 Cứng vững</div><p>Độ võng <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>f</mi><mo lspace="0.17em" rspace="0.17em">≤</mo><mrow><mo fence="true" stretchy="true">[</mo><mrow><mi>f</mi></mrow><mo fence="true" stretchy="true">]</mo></mrow></mrow></math> (thường được miễn nếu <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mrow><mo fence="true" stretchy="true">[</mo><mrow><mi>s</mi></mrow><mo fence="true" stretchy="true">]</mo></mrow></mrow></math> đạt)</p></div>
+<div class="step"><div class="h">3.2.1 Bố trí ổ</div><p>Loại ổ, chung hay riêng, ký hiệu theo Ø lắp</p></div>
+<div class="step"><div class="h">3.2.2 Tải động</div><p><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>Q</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mi>X</mi><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>F</mi></mrow><mrow><mi>r</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">+</mo><mi>Y</mi><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>F</mi></mrow><mrow><mi>a</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">≤</mo><mi>C</mi></mrow></math> → tính tuổi thọ</p></div>
+<div class="step"><div class="h">3.2.3 Tải tĩnh</div><p><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>Q</mi></mrow><mrow><mn>0</mn></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><msub><mrow><mi>X</mi></mrow><mrow><mn>0</mn></mrow></msub><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>F</mi></mrow><mrow><mi>r</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">+</mo><msub><mrow><mi>Y</mi></mrow><mrow><mn>0</mn></mrow></msub><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>F</mi></mrow><mrow><mi>a</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">≤</mo><msub><mrow><mi>C</mi></mrow><mrow><mn>0</mn></mrow></msub></mrow></math></p></div>
+<div class="step"><div class="h">3.3 Then</div><p>Tra bảng then theo Ø → kiểm bền dập và bền cắt</p></div>
+</div>
+
+<div class="box lft">
+<h4>Ba điều kiện phải thỏa mãn đồng thời ở cuối mục 3.1</h4>
+<ol>
+<li>Ø thiết kế <b>≥</b> Ø sơ bộ ở cùng vị trí.</li>
+<li>Ø lắp ổ <b>≥</b> Ø thiết kế tại vị trí lắp ổ.</li>
+<li>Mọi moay – ơ nằm trên một đoạn trục có Ø đủ lớn, không chồng lấn, và còn chỗ khoan tâm.</li>
+</ol>
+<p>Thiếu một trong ba điều kiện thì bản vẽ đó <b>không gia công được</b> — đó là lỗi nặng nhất trong đồ án.</p>
+</div>
+
+<!-- ============ 3.1.1 ============ -->
+<h2 id="s3"><span class="no">3.</span>Mục 3.1.1 — Chọn vật liệu trục <span class="tagx n1">N1</span></h2>
+
+<h3>Bước 1: Xác định điều kiện làm việc</h3>
+<table>
+<tr><th>Điều kiện</th><th>Suy ra</th></tr>
+<tr><td>Trục chịu uốn và xoắn đồng thời</td><td>Ưu tiên thép hợp kim có σ_b cao thay vì thép carbon thường</td></tr>
+<tr><td>Tải biến đổi mạnh, <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>K</mi></mrow><mrow><mtext>qt</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>170</mn></mrow></mrow></math>%</td><td>Phải <b>tôi cải thiện bề mặt</b> để đạt độ bền mỏi</td></tr>
+<tr><td>Trục dài, khối lượng lớn</td><td>Tiết kiệm vật liệu có ý nghĩa kinh tế rõ rệt</td></tr>
+<tr><td>Cần tạo rãnh then, lỗ khoan tâm, ren</td><td>Vật liệu phải dễ gia công, không quá cứng</td></tr>
+</table>
+
+<h3>Bước 2: Chọn vật liệu và tra bảng</h3>
+<div class="f">Chọn: thép 40Cr, tôi cải thiện</div>
+<table>
+<tr><th>Đại lượng</th><th>Giá trị tra được</th><th>Cách chọn</th></tr>
+<tr><td>Giới hạn bền kéo</td><td><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>σ</mi></mrow><mrow><mi>b</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">≥</mo><mrow><mn>850</mn></mrow></mrow></math> MPa</td><td>Lấy σ_b = <b>900 MPa</b> (làm tròn lên, an toàn)</td></tr>
+<tr><td>Ứng suất uốn cho phép</td><td><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mrow><mo fence="true" stretchy="true">[</mo><mrow><mi>σ</mi></mrow><mo fence="true" stretchy="true">]</mo></mrow><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>70</mn></mrow><mo lspace="0.17em" rspace="0.17em">÷</mo><mrow><mn>90</mn></mrow></mrow></math> MPa</td><td>Lấy [σ] = <b>85 MPa</b></td></tr>
+<tr><td>Ứng suất xoắn cho phép</td><td><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mrow><mo fence="true" stretchy="true">[</mo><mrow><mi>τ</mi></mrow><mo fence="true" stretchy="true">]</mo></mrow><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>20</mn></mrow><mo lspace="0.17em" rspace="0.17em">÷</mo><mrow><mn>25</mn></mrow></mrow></math> MPa</td><td>Lấy [τ] = <b>20 MPa</b></td></tr>
+</table>
+
+<div class="box acc">
+<h4>Vì sao lại tôi cải thiện?</h4>
+<p>Tôi cải thiện làm tăng giới hạn bền mỏi σ<sub>−1</sub>. Nhờ đó có thể dùng ứng suất cho phép cao hơn
+mà vẫn an toàn, từ đó giữ được đường kính trục nhỏ. <b>Đây là lập luận phải viết ra thuyết minh</b>,
+không được chỉ ghi "chọn thép 40Cr" rồi im.</p>
+</div>
+
+<div class="box wrn">
+<h4>❌ Lỗi 1 thường gặp</h4>
+<p><b>Biểu hiện:</b> lấy <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mrow><mo fence="true" stretchy="true">[</mo><mrow><mi>τ</mi></mrow><mo fence="true" stretchy="true">]</mo></mrow><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>25</mn></mrow></mrow></math> MPa để trục nhẹ hơn.<br>
+<b>Nguyên nhân:</b> hiểu [σ], [τ] là con số cố định thay vì là <b>vùng giá trị</b> phụ thuộc loại tải.<br>
+<b>Cách khắc phục:</b> ghi rõ trong thuyết minh: "<math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mrow><mo fence="true" stretchy="true">[</mo><mrow><mi>τ</mi></mrow><mo fence="true" stretchy="true">]</mo></mrow><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>20</mn></mrow><mo lspace="0.17em" rspace="0.17em">÷</mo><mrow><mn>25</mn></mrow></mrow></math> MPa, chọn <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mrow><mn>20</mn></mrow></mrow></math> MPa vì trục chịu xoắn mạch động".</p>
+</div>
+
+<!-- ============ 3.1.2 ============ -->
+<h2 id="s4"><span class="no">4.</span>Mục 3.1.2 — Tính sơ bộ đường kính trục <span class="tagx n1">N1</span></h2>
+
+<div class="box lft">
+<h4>Ý tưởng</h4>
+<p>Sơ bộ theo <b>sức bền xoắn tĩnh</b>, vì mô-men xoắn là đại lượng duy nhất đã biết chắc chắn từ bảng thông số
+(mục 1.3.3 của đề cương), còn mô-men uốn phải chờ phân tích lực ở mục 3.1.3.</p>
+<div class="f big"><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>d</mi><mo lspace="0.17em" rspace="0.17em">≥</mo><mroot><mrow><mfrac><mrow><mrow><mn>16</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>T</mi></mrow><mrow><mrow><mi>π</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mo fence="true" stretchy="true">[</mo><mrow><mi>τ</mi></mrow><mo fence="true" stretchy="true">]</mo></mrow></mrow></mrow></mfrac></mrow><mrow><mtext>3</mtext></mrow></mroot></mrow></math></div></div>
+</div>
+
+<h3>Tính cho trục I</h3>
+<div class="f"><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mrow><mi>T</mi></mrow><mrow><mn>1</mn></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>81</mn><mspace width="0.15em"/><mn>864</mn><mn>,175</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>N</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mtext>mm</mtext><mspace width="0.2em"/><mtext>;</mtext><mspace width="0.2em"/><mrow><mo fence="true" stretchy="true">[</mo><mrow><mi>τ</mi></mrow><mo fence="true" stretchy="true">]</mo></mrow><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>20</mn></mrow><mspace width="0.2em"/><mtext>MPa</mtext></mrow></math></div><div class="eq cont"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mrow><mi>d</mi></mrow><mrow><mn>1</mn></mrow></msub><mo lspace="0.17em" rspace="0.17em">≥</mo><mroot><mrow><mfrac><mrow><mrow><mn>16</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>81</mn><mspace width="0.15em"/><mn>864</mn><mn>,175</mn></mrow></mrow><mrow><mrow><mi>π</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>20</mn></mrow></mrow></mrow></mfrac></mrow><mrow><mtext>3</mtext></mrow></mroot></mrow></math></div><div class="eq cont"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo lspace="0.17em" rspace="0.17em">=</mo><mroot><mrow><mfrac><mrow><mrow><mn>1</mn><mspace width="0.15em"/><mn>309</mn><mspace width="0.15em"/><mn>826</mn><mn>,8</mn></mrow></mrow><mrow><mrow><mn>62</mn><mspace width="0.15em"/><mn>832</mn></mrow></mrow></mfrac></mrow><mrow><mtext>3</mtext></mrow></mroot></mrow></math></div><div class="eq cont"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo lspace="0.17em" rspace="0.17em">=</mo><mroot><mrow><mrow><mn>20</mn><mspace width="0.15em"/><mn>845</mn></mrow></mrow><mrow><mtext>3</mtext></mrow></mroot></mrow></math></div><div class="eq cont"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>27</mn><mn>,522</mn></mrow><mspace width="0.2em"/><mtext>mm</mtext></mrow></math></div><div class="src"><b>[NHL]</b> §8.1 <span class="pg">tr. 161–162</span> — thiết kế sơ bộ đường kính trục theo mô-men xoắn, công thức <b>(8.2)</b>.</div>
+  </div>
+
+<h3>Tính cho trục II</h3>
+<div class="f"><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mrow><mi>T</mi></mrow><mrow><mn>2</mn></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>197</mn><mspace width="0.15em"/><mn>153</mn><mn>,350</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>N</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mtext>mm</mtext><mspace width="0.2em"/><mtext>;</mtext><mspace width="0.2em"/><mrow><mo fence="true" stretchy="true">[</mo><mrow><mi>τ</mi></mrow><mo fence="true" stretchy="true">]</mo></mrow><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>20</mn></mrow><mspace width="0.2em"/><mtext>MPa</mtext></mrow></math></div><div class="eq cont"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mrow><mi>d</mi></mrow><mrow><mn>2</mn></mrow></msub><mo lspace="0.17em" rspace="0.17em">≥</mo><mroot><mrow><mfrac><mrow><mrow><mn>16</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>197</mn><mspace width="0.15em"/><mn>153</mn><mn>,350</mn></mrow></mrow><mrow><mrow><mi>π</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>20</mn></mrow></mrow></mrow></mfrac></mrow><mrow><mtext>3</mtext></mrow></mroot></mrow></math></div><div class="eq cont"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo lspace="0.17em" rspace="0.17em">=</mo><mroot><mrow><mfrac><mrow><mrow><mn>3</mn><mspace width="0.15em"/><mn>154</mn><mspace width="0.15em"/><mn>453</mn><mn>,6</mn></mrow></mrow><mrow><mrow><mn>62</mn><mspace width="0.15em"/><mn>832</mn></mrow></mrow></mfrac></mrow><mrow><mtext>3</mtext></mrow></mroot></mrow></math></div><div class="eq cont"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo lspace="0.17em" rspace="0.17em">=</mo><mroot><mrow><mrow><mn>50</mn><mspace width="0.15em"/><mn>207</mn></mrow></mrow><mrow><mtext>3</mtext></mrow></mroot></mrow></math></div><div class="eq cont"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>36</mn><mn>,891</mn></mrow><mspace width="0.2em"/><mtext>mm</mtext></mrow></math></div><div class="src"><b>[NHL]</b> §8.1, công thức <b>(8.2)</b> <span class="pg">tr. 162</span> — <b>lưu ý đơn vị:</b> sách dùng T tính bằng N·m nên có hệ số 10; bài này dùng N·mm nên hệ số bằng 1.</div>
+  </div>
+
+<h3>Chọn theo dãy tiêu chuẩn</h3>
+<div class="f res"><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mrow><mi>d</mi></mrow><mrow><mn>1</mn></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>28</mn></mrow><mspace width="0.2em"/><mtext>mm</mtext><mspace width="0.2em"/><msub><mrow><mi>d</mi></mrow><mrow><mn>2</mn></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>38</mn></mrow><mspace width="0.2em"/><mtext>mm</mtext></mrow></math></div><div class="src"><b>[NHL]</b> §8.1, công thức <b>(8.2)</b> <span class="pg">tr. 162</span>.</div>
+  </div>
+<div class="note">Làm tròn <b>ra</b> theo dãy tiêu chuẩn, không làm tròn vào — còn dư chỗ cho cấp xích
+và đầu tiện khi gia công.</div>
+
+<div class="box wrn">
+<h4>❌ Lỗi 2 thường gặp</h4>
+<p><b>Biểu hiện:</b> kết quả nhỏ hơn thực tế khoảng 1000 lần.<br>
+<b>Nguyên nhân:</b> dùng <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>T</mi></mrow></math> bằng <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>N</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mi>m</mi></mrow></math> thay vì <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>N</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mtext>mm</mtext></mrow></math>, hoặc lấy <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mrow><mo fence="true" stretchy="true">[</mo><mrow><mi>τ</mi></mrow><mo fence="true" stretchy="true">]</mo></mrow></mrow></math> của vật liệu khác.<br>
+<b>Cách khắc phục:</b> viết đơn vị ngay cạnh từng số liệu thay số. Kiểm nhanh:
+∛(20 845) phải ra khoảng 27,5 — nếu ra 0,0275 thì bạn đã lỗi đơn vị.</p>
+</div>
+
+<!-- ============ 3.1.3 ============ -->
+<h2 id="s5"><span class="no">5.</span>Mục 3.1.3 — Phân tích lực tác dụng lên trục <span class="tagx n1">N1</span></h2>
+
+<h3>Các loại lực phải xét</h3>
+<table>
+<tr><th style="width:22%">Lực</th><th>Ký hiệu</th><th>Sinh ra từ</th><th>Công thức</th></tr>
+<tr><td>Lực vòng</td><td>F_t</td><td>Tang tiếp với bánh răng / bánh đai / bánh xích</td><td><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>F</mi></mrow><mrow><mi>t</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mrow><mn>2</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>T</mi></mrow><mrow><msub><mrow><mi>d</mi></mrow><mrow><mi>m</mi></mrow></msub></mrow></mfrac></mrow></math></td></tr>
+<tr><td>Lực hướng tâm</td><td>F_r</td><td>Lực vòng ép vào chân răng, chân đai, chân xích</td><td><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>F</mi></mrow><mrow><mi>r</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><msub><mrow><mi>F</mi></mrow><mrow><mi>t</mi></mrow></msub><mspace width="0.2em"/><mtext>cos</mtext><mspace width="0.2em"/><mi>δ</mi></mrow></math>; <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>δ</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>20</mn></mrow><mo lspace="0.17em" rspace="0.17em">°</mo><mo lspace="0.17em" rspace="0.17em">÷</mo><mrow><mn>25</mn></mrow><mo lspace="0.17em" rspace="0.17em">°</mo></mrow></math></td></tr>
+<tr><td>Lực dọc trục</td><td>F_a</td><td>Chỉ có ở bánh răng côn</td><td><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>F</mi></mrow><mrow><mi>a</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><msub><mrow><mi>F</mi></mrow><mrow><mi>t</mi></mrow></msub><mspace width="0.2em"/><mtext>tan</mtext><mspace width="0.2em"/><mi>δ</mi></mrow></math>; <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>M</mi></mrow><mrow><mi>a</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><msub><mrow><mi>F</mi></mrow><mrow><mi>a</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>d</mi></mrow><mrow><mi>m</mi></mrow></msub></mrow><mrow><mrow><mn>2</mn></mrow></mrow></mfrac></mrow></math></td></tr>
+<tr><td>Lực khớp nối</td><td><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>F</mi></mrow><mrow><mtext>tkn</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>F</mi></mrow><mrow><mtext>rkn</mtext></mrow></msub></mrow></math></td><td>Khớp nối đàn hồy truyền mô-men xoắn</td><td><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>F</mi></mrow><mrow><mtext>tkn</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mrow><mn>2</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>M</mi></mrow><mrow><mtext>tkn</mtext></mrow></msub></mrow><mrow><msub><mrow><mi>D</mi></mrow><mrow><mn>0</mn></mrow></msub></mrow></mfrac></mrow></math>; <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>F</mi></mrow><mrow><mtext>rkn</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>0</mn><mn>,25</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>F</mi></mrow><mrow><mtext>tkn</mtext></mrow></msub></mrow></math></td></tr>
+</table>
+
+<h3>Số liệu bộ truyền trên trục I và II</h3>
+<table>
+<tr><th>Trục</th><th><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>F</mi></mrow><mrow><mi>t</mi></mrow></msub></mrow></math> (N)</th><th><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>F</mi></mrow><mrow><mi>r</mi></mrow></msub></mrow></math> (N)</th><th><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>F</mi></mrow><mrow><mi>a</mi></mrow></msub></mrow></math> (N)</th><th><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>d</mi></mrow><mrow><mi>m</mi></mrow></msub></mrow></math> (mm)</th></tr>
+<tr><td>I — bánh răng chủ động</td><td>1 928,666</td><td>653,181</td><td>247,972</td><td>84,89 ≈ 85</td></tr>
+<tr><td>II — bánh răng bị dẫn</td><td>1 824,6 (xem mục 15)</td><td>653,181</td><td>653,181</td><td>216,09 ≈ 217</td></tr>
+<tr><td>II — bộ truyền ngoài</td><td>—</td><td>2 243,425 (xiên)</td><td>—</td><td>—</td></tr>
+</table>
+
+<h3>Mô-men uốn do lực dọc trục (đặc trưng bánh răng côn)</h3>
+<div class="f sm"><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mrow><mi>M</mi></mrow><mrow><mtext>a1</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><msub><mrow><mi>F</mi></mrow><mrow><mtext>a1</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>0</mn><mn>,5</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>d</mi></mrow><mrow><mtext>m1</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>247</mn><mn>,972</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>0</mn><mn>,5</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>85</mn></mrow><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>10</mn><mspace width="0.15em"/><mn>538</mn><mn>,81</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>N</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mtext>mm</mtext></mrow></math></div><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mrow><mi>M</mi></mrow><mrow><mtext>a2</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><msub><mrow><mi>F</mi></mrow><mrow><mtext>a2</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>d</mi></mrow><mrow><mtext>m2</mtext></mrow></msub></mrow><mrow><mrow><mn>2</mn></mrow></mrow></mfrac><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mrow><mn>653</mn><mn>,181</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>217</mn></mrow></mrow><mrow><mrow><mn>2</mn></mrow></mrow></mfrac><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>70</mn><mspace width="0.15em"/><mn>870</mn><mn>,14</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>N</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mtext>mm</mtext></mrow></math></div><div class="src"><b>[NHL]</b> §8.1 <span class="pg">tr. 161–162</span> — chọn đường kính theo dãy tiêu chuẩn; nếu trục có rãnh then thì tăng thêm 5 ÷ 10 % <span class="pg">tr. 298</span>.</div>
+  </div>
+
+<h3>Bộ truyền ngoài — phải phân lực xiên</h3>
+<div class="f"><div class="cm">Góc đo theo quy ước sơ đồ phân tích lực: β = 145°</div><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>α</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>180</mn></mrow><mo lspace="0.17em" rspace="0.17em">°</mo><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mo lspace="0.17em" rspace="0.17em">−</mo><mi>β</mi></mrow><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>35</mn></mrow><mo lspace="0.17em" rspace="0.17em">°</mo></mrow></math></div><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mrow><mi>F</mi></mrow><mrow><mtext>rx</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><msub><mrow><mi>F</mi></mrow><mrow><mi>r</mi></mrow></msub><mspace width="0.2em"/><mtext>sin</mtext><mspace width="0.2em"/><mi>α</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>2</mn><mspace width="0.15em"/><mn>243</mn><mn>,425</mn></mrow><mspace width="0.2em"/><mtext>sin</mtext><mspace width="0.2em"/><mrow><mn>35</mn></mrow><mo lspace="0.17em" rspace="0.17em">°</mo><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>1</mn><mspace width="0.15em"/><mn>286</mn><mn>,776</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>N</mi></mrow></math></div><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mrow><mi>F</mi></mrow><mrow><mtext>rz</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><msub><mrow><mi>F</mi></mrow><mrow><mi>r</mi></mrow></msub><mspace width="0.2em"/><mtext>cos</mtext><mspace width="0.2em"/><mi>α</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>2</mn><mspace width="0.15em"/><mn>243</mn><mn>,425</mn></mrow><mspace width="0.2em"/><mtext>cos</mtext><mspace width="0.2em"/><mrow><mn>35</mn></mrow><mo lspace="0.17em" rspace="0.17em">°</mo><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>1</mn><mspace width="0.15em"/><mn>837</mn><mn>,706</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>N</mi></mrow></math></div><div class="src"><b>[NHL]</b> §7.3 <span class="pg">tr. 155</span> — xác định giá trị các lực tác dụng lên trục; xem thêm Hình 11.3 <span class="pg">tr. 290</span>.</div>
+  </div>
+<div class="f res"><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mtext>Kiểm</mtext><mspace width="0.2em"/><mtext>:</mtext><mspace width="0.2em"/><msup><mrow><mrow><mn>1</mn><mspace width="0.15em"/><mn>286</mn><mn>,776</mn></mrow></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup><mo lspace="0.17em" rspace="0.17em">+</mo><msup><mrow><mrow><mn>1</mn><mspace width="0.15em"/><mn>837</mn><mn>,706</mn></mrow></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>5</mn><mspace width="0.15em"/><mn>033</mn><mspace width="0.15em"/><mn>076</mn></mrow><mo lspace="0.17em" rspace="0.17em">≈</mo><msup><mrow><mrow><mn>2</mn><mspace width="0.15em"/><mn>243</mn><mn>,425</mn></mrow></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>5</mn><mspace width="0.15em"/><mn>032</mn><mspace width="0.15em"/><mn>956</mn></mrow><mo lspace="0.17em" rspace="0.17em">✔</mo></mrow></math></div><div class="src"><b>[NHL]</b> §7.2 <span class="pg">tr. 151</span> — quy ước góc đo lực xiên; Hình 11.3 <span class="pg">tr. 290</span> thể hiện cách tách lực xiên thành F<sub>rx</sub>, F<sub>rz</sub>.</div>
+  </div>
+
+<h3>Xác định phản lực tại gối trục I</h3>
+<div class="f sm"><div class="cm">Xét mặt phẳng zOy, lấy moment quanh gối A:</div><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>Σ</mi><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>M</mi></mrow><mrow><mi>A</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>0</mn></mrow><mspace width="0.2em"/><mtext>:</mtext><mspace width="0.2em"/><msub><mrow><mi>F</mi></mrow><mrow><mtext>r1</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">·</mo><mi>a</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mo lspace="0.17em" rspace="0.17em">−</mo><msub><mrow><mi>M</mi></mrow><mrow><mtext>a1</mtext></mrow></msub></mrow><mo lspace="0.17em" rspace="0.17em">+</mo><msub><mrow><mi>F</mi></mrow><mrow><mtext>rkn</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">·</mo><mi>b</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mo lspace="0.17em" rspace="0.17em">−</mo><msub><mrow><mi>Y</mi></mrow><mrow><mi>B</mi></mrow></msub></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>L</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>0</mn></mrow></mrow></math></div><div class="eq cont"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mspace width="0.2em"/><mtext>→</mtext><mspace width="0.2em"/><msub><mrow><mi>Y</mi></mrow><mrow><mi>B</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>2</mn><mspace width="0.15em"/><mn>801</mn><mn>,9</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>N</mi></mrow></math></div><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>Σ</mi><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>F</mi></mrow><mrow><mi>y</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>0</mn></mrow><mspace width="0.2em"/><mtext>:</mtext><mspace width="0.2em"/><msub><mrow><mi>Y</mi></mrow><mrow><mi>A</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mo lspace="0.17em" rspace="0.17em">−</mo><msub><mrow><mi>F</mi></mrow><mrow><mtext>r1</mtext></mrow></msub></mrow><mo lspace="0.17em" rspace="0.17em">+</mo><msub><mrow><mi>F</mi></mrow><mrow><mtext>rkn</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">+</mo><msub><mrow><mi>Y</mi></mrow><mrow><mi>B</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>2</mn><mspace width="0.15em"/><mn>040</mn><mn>,9</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>N</mi></mrow></math></div><div class="src"><b>[NHL]</b> Hình 11.3 <span class="pg">tr. 290</span> — bất biến kiểm tra lực xiên trên sơ đồ lực.</div>
+  </div>
+
+<h3>Mặt cắt nguy hiểm và mô-men uốn</h3>
+<table>
+<tr><th>Mặt cắt</th><th><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>M</mi></mrow><mrow><mi>x</mi></mrow></msub></mrow></math> (N·mm)</th><th><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>M</mi></mrow><mrow><mi>y</mi></mrow></msub></mrow></math> (N·mm)</th><th><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>M</mi></mrow><mrow><mi>t</mi></mrow></msub></mrow></math> (N·mm)</th></tr>
+<tr><td><b>B</b> — trục I</td><td>48 247,5</td><td>173 579,9</td><td>81 864,2</td></tr>
+<tr><td><b>D</b> — trục II</td><td>220 524,7</td><td>154 413,1</td><td>197 153,4</td></tr>
+</table>
+<div class="f sm"><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mrow><mi>M</mi></mrow><mrow><mtext>xB</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><msub><mrow><mi>M</mi></mrow><mrow><mtext>a1</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mo lspace="0.17em" rspace="0.17em">−</mo><msub><mrow><mi>F</mi></mrow><mrow><mtext>r1</mtext></mrow></msub></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>90</mn></mrow><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>10</mn><mspace width="0.15em"/><mn>538</mn><mn>,81</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mn>−653,181</mn><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>90</mn></mrow><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>48</mn><mspace width="0.15em"/><mn>247</mn><mn>,5</mn></mrow></mrow></math></div><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mrow><mi>M</mi></mrow><mrow><mtext>yB</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><msub><mrow><mi>F</mi></mrow><mrow><mtext>t1</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>90</mn></mrow><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>1</mn><mspace width="0.15em"/><mn>928</mn><mn>,666</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>90</mn></mrow><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>173</mn><mspace width="0.15em"/><mn>579</mn><mn>,9</mn></mrow></mrow></math></div><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mrow><mi>M</mi></mrow><mrow><mtext>xD</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><msub><mrow><mi>F</mi></mrow><mrow><mtext>rz</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>120</mn></mrow><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>1</mn><mspace width="0.15em"/><mn>837</mn><mn>,706</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>120</mn></mrow><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>220</mn><mspace width="0.15em"/><mn>524</mn><mn>,7</mn></mrow></mrow></math></div><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mrow><mi>M</mi></mrow><mrow><mtext>yD</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><msub><mrow><mi>F</mi></mrow><mrow><mtext>rx</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>120</mn></mrow><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>1</mn><mspace width="0.15em"/><mn>286</mn><mn>,776</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>120</mn></mrow><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>154</mn><mspace width="0.15em"/><mn>413</mn><mn>,1</mn></mrow></mrow></math></div><div class="src"><b>[NHL]</b> Hình 11.3 <span class="pg">tr. 290</span> và trình tự bước 3 <span class="pg">tr. 298</span> — <b>phản lực gối quyết định vị trí mặt cắt nguy hiểm</b>.</div>
+  </div>
+
+<div class="box lft">
+<h4>Nguyên tắc xác định mặt cắt nguy hiểm</h4>
+<p>Chọn nơi <b>vừa có mô-men uốn lớn nhất vừa có mô-men xoắn</b>. Thường đó là mặt cắt ngay tại ổ
+đặt về phía bộ truyền. Nếu một đoạn trục có mô-men uốn lớn nhưng không có mô-men xoắn thì không
+được coi là mặt cắt nguy hiểm nhất — và ngược lại.</p>
+</div>
+
+<div class="box wrn">
+<h4>❌ Lỗi 3 và 4 thường gặp</h4>
+<p><b>Lỗi 3 – sai đòn tay:</b> lấy đòn tay từ <b>mặt trong</b> moay – ơ thay vì từ <b>giữa</b> moay – ơ;
+hoặc lấy nhầm khoảng cách giữa hai vị trí trục.<br>
+<b>Lỗi 4 – bỏ qua góc xiên:</b> lấy toàn bộ lực căng của bộ truyền ngoài vào một phương.<br>
+<b>Cách khắc phục cho cả hai:</b> vẽ sơ đồ chiều dài có ghi đủ số đo <b>trước</b> khi tính; mỗi lực ghi kèm
+"vị trí = …, tính từ gối …"; và kiểm tra lại bằng đẳng thức Pythagore cho lực xiên.</p>
+</div>
+
+<!-- ============ 3.1.4 ============ -->
+<h2 id="s6"><span class="no">6.</span>Mục 3.1.4 — Tính đường kính và chiều dài các đoạn trục <span class="tagx n1">N1</span></h2>
+
+<h3>Bước 1: Mô-men uốn tương đương</h3>
+<div class="f big"><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mrow><mi>M</mi></mrow><mrow><mtext>td</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><msqrt><mrow><msup><mrow><msub><mrow><mi>M</mi></mrow><mrow><mi>x</mi></mrow></msub></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup><mo lspace="0.17em" rspace="0.17em">+</mo><msup><mrow><msub><mrow><mi>M</mi></mrow><mrow><mi>y</mi></mrow></msub></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup><mo lspace="0.17em" rspace="0.17em">+</mo><mrow><mn>0</mn><mn>,75</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><msup><mrow><msub><mrow><mi>M</mi></mrow><mrow><mi>t</mi></mrow></msub></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup></mrow></msqrt></mrow></math></div><div class="src"><b>[NHL]</b> Hình 11.3 <span class="pg">tr. 290</span> — các thành phần M<sub>x</sub>, M<sub>y</sub>, T tại mặt cắt I–III.</div>
+  </div>
+<div class="f sm"><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mrow><mi>M</mi></mrow><mrow><mtext>tdB</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><msqrt><mrow><msup><mrow><mrow><mn>48</mn><mspace width="0.15em"/><mn>247</mn><mn>,5</mn></mrow></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup><mo lspace="0.17em" rspace="0.17em">+</mo><msup><mrow><mrow><mn>173</mn><mspace width="0.15em"/><mn>579</mn><mn>,9</mn></mrow></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup><mo lspace="0.17em" rspace="0.17em">+</mo><mrow><mn>0</mn><mn>,75</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><msup><mrow><mrow><mn>81</mn><mspace width="0.15em"/><mn>864</mn><mn>,2</mn></mrow></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup></mrow></msqrt><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>193</mn><mspace width="0.15em"/><mn>608</mn><mn>,2</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>N</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mtext>mm</mtext></mrow></math></div><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mrow><mi>M</mi></mrow><mrow><mtext>tdD</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><msqrt><mrow><msup><mrow><mrow><mn>220</mn><mspace width="0.15em"/><mn>524</mn><mn>,7</mn></mrow></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup><mo lspace="0.17em" rspace="0.17em">+</mo><msup><mrow><mrow><mn>154</mn><mspace width="0.15em"/><mn>413</mn><mn>,1</mn></mrow></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup><mo lspace="0.17em" rspace="0.17em">+</mo><mrow><mn>0</mn><mn>,75</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><msup><mrow><mrow><mn>197</mn><mspace width="0.15em"/><mn>153</mn><mn>,4</mn></mrow></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup></mrow></msqrt><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>318</mn><mspace width="0.15em"/><mn>789</mn><mn>,3</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>N</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mtext>mm</mtext></mrow></math></div><div class="src"><b>[NHL]</b> §11.2 mục 3 <span class="pg">tr. 297</span> — <b>M<sub>td</sub> = √(M² + 0,75T²)</b>, M² = M<sub>x</sub>² + M<sub>y</sub>². Hệ số 0,75 chỉ nhân với T².</div>
+  </div>
+<div class="box acc">
+<p><b>Hệ số <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mrow><mn>0</mn><mn>,75</mn></mrow></mrow></math> nằm trong ngoặc cùng <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msup><mrow><msub><mrow><mi>M</mi></mrow><mrow><mi>t</mi></mrow></msub></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup></mrow></math></b> — không phải cùng <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msup><mrow><msub><mrow><mi>M</mi></mrow><mrow><mi>x</mi></mrow></msub></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup></mrow></math> và <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msup><mrow><msub><mrow><mi>M</mi></mrow><mrow><mi>y</mi></mrow></msub></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup></mrow></math>.
+Lý do: mô-men xoắn biến đổi <b>mạch động</b> trong khi mô-men uốn biến đổi <b>đối xứng</b>.
+Ứng suất do xoắn "tệ hơn" nên về nguyên tắc phải tăng hệ số, nhưng do cùng hệ số an toàn đã tính ở
+[σ] nên được giảm nhẹ lại thành 0,75 — tuyệt đối không được đặt bằng 0.</p>
+</div>
+
+<h3>Bước 2: Đường kính thiết kế tại mặt cắt nguy hiểm</h3>
+<div class="f big"><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>d</mi><mo lspace="0.17em" rspace="0.17em">≥</mo><mroot><mrow><mfrac><mrow><mrow><mn>32</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>M</mi></mrow><mrow><mtext>td</mtext></mrow></msub></mrow><mrow><mrow><mi>π</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mo fence="true" stretchy="true">[</mo><mrow><mi>σ</mi></mrow><mo fence="true" stretchy="true">]</mo></mrow></mrow></mrow></mfrac></mrow><mrow><mtext>3</mtext></mrow></mroot></mrow></math></div><div class="src"><b>[NHL]</b> §11.2 mục 3 <span class="pg">tr. 297</span>.</div>
+  </div>
+<div class="f sm"><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mrow><mi>d</mi></mrow><mrow><mi>B</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">≥</mo><mroot><mrow><mfrac><mrow><mrow><mn>32</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>193</mn><mspace width="0.15em"/><mn>608</mn><mn>,2</mn></mrow></mrow><mrow><mrow><mi>π</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>85</mn></mrow></mrow></mrow></mfrac></mrow><mrow><mtext>3</mtext></mrow></mroot><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>28</mn><mn>,52</mn></mrow><mspace width="0.2em"/><mtext>mm</mtext></mrow></math></div><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mrow><mi>d</mi></mrow><mrow><mi>D</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">≥</mo><mroot><mrow><mfrac><mrow><mrow><mn>32</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>318</mn><mspace width="0.15em"/><mn>789</mn><mn>,3</mn></mrow></mrow><mrow><mrow><mi>π</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>85</mn></mrow></mrow></mrow></mfrac></mrow><mrow><mtext>3</mtext></mrow></mroot><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>33</mn><mn>,68</mn></mrow><mspace width="0.2em"/><mtext>mm</mtext></mrow></math></div><div class="src"><b>[NHL]</b> §11.2 mục 3 <span class="pg">tr. 297</span>, công thức <b>(11.26)</b> <span class="pg">tr. 298</span> — sách dùng M<sub>td</sub> tính bằng N·m nên có hệ số 10³; bài này dùng N·mm.</div>
+  </div>
+<p>Mặt cắt lắp ổ <b>không có rãnh then</b> nên không tăng thêm hệ số. Tra bảng dãy đường kính chuẩn:</p>
+<div class="f res"><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mrow><mi>d</mi></mrow><mrow><mtext>olB</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>30</mn></mrow><mspace width="0.2em"/><mtext>mm</mtext><mspace width="0.2em"/><msub><mrow><mi>d</mi></mrow><mrow><mtext>olD</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>35</mn></mrow><mspace width="0.2em"/><mtext>mm</mtext></mrow></math></div><div class="src"><b>[NHL]</b> công thức <b>(11.26)</b> <span class="pg">tr. 298</span>.</div>
+  </div>
+
+<div class="box navy">
+<h4>Kiểm tra ngược bằng mô-men cản — luôn làm bước này</h4>
+<div class="f"><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>d</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>30</mn></mrow><mspace width="0.2em"/><mtext>mm</mtext><mspace width="0.2em"/><mtext>:</mtext><mspace width="0.2em"/><mi>W</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mi>π</mi><mo lspace="0.17em" rspace="0.17em">·</mo><msup><mrow><mi>d</mi></mrow><mrow><mrow><mn>3</mn></mrow></mrow></msup></mrow><mrow><mrow><mn>32</mn></mrow></mrow></mfrac><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>2</mn><mspace width="0.15em"/><mn>650</mn><mn>,7</mn></mrow><mspace width="0.2em"/><msup><mrow><mtext>mm</mtext></mrow><mrow><mrow><mn>3</mn></mrow></mrow></msup></mrow></math></div><div class="eq cont"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>σ</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mrow><mn>193</mn><mspace width="0.15em"/><mn>608</mn><mn>,2</mn></mrow></mrow><mrow><mrow><mn>2</mn><mspace width="0.15em"/><mn>650</mn><mn>,7</mn></mrow></mrow></mfrac><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>73</mn><mn>,0</mn></mrow><mspace width="0.2em"/><mtext>MPa</mtext><mo lspace="0.17em" rspace="0.17em">≤</mo><mrow><mn>85</mn></mrow><mspace width="0.2em"/><mtext>MPa</mtext><mo lspace="0.17em" rspace="0.17em">✔</mo></mrow></math></div><div class="src"><b>[NHL]</b> §8.1 <span class="pg">tr. 161–162</span> và Bảng 8.2 <span class="pg">tr. 162</span> — chọn đường kính lắp ổ theo sơ bộ.</div>
+  </div><div class="f"><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>d</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>35</mn></mrow><mspace width="0.2em"/><mtext>mm</mtext><mspace width="0.2em"/><mtext>:</mtext><mspace width="0.2em"/><mi>W</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mi>π</mi><mo lspace="0.17em" rspace="0.17em">·</mo><msup><mrow><mi>d</mi></mrow><mrow><mrow><mn>3</mn></mrow></mrow></msup></mrow><mrow><mrow><mn>32</mn></mrow></mrow></mfrac><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>4</mn><mspace width="0.15em"/><mn>209</mn><mn>,2</mn></mrow><mspace width="0.2em"/><msup><mrow><mtext>mm</mtext></mrow><mrow><mrow><mn>3</mn></mrow></mrow></msup></mrow></math></div><div class="eq cont"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>σ</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mrow><mn>318</mn><mspace width="0.15em"/><mn>789</mn><mn>,3</mn></mrow></mrow><mrow><mrow><mn>4</mn><mspace width="0.15em"/><mn>209</mn><mn>,2</mn></mrow></mrow></mfrac><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>75</mn><mn>,7</mn></mrow><mspace width="0.2em"/><mtext>MPa</mtext><mo lspace="0.17em" rspace="0.17em">≤</mo><mrow><mn>85</mn></mrow><mspace width="0.2em"/><mtext>MPa</mtext><mo lspace="0.17em" rspace="0.17em">✔</mo></mrow></math></div><div class="src"><b>[NHL]</b> Bảng 11.2 <span class="pg">tr. 292</span>, công thức <b>(11.21)</b> — mô-men cản uốn của <b>trục đặc</b> W = πd³/32.</div>
+  </div>
+</div>
+
+<h3>Bước 3: Chiều dài moay – ơ (tra bảng theo loại chi tiết)</h3>
+<table>
+<tr><th>Vị trí</th><th>Quy tắc</th><th>Tính</th><th>Chọn</th></tr>
+<tr><td>Moay – ơ khớp nối</td><td>1,5 d₁</td><td>1,5 × 28 = 42,0</td><td><b>42 mm</b></td></tr>
+<tr><td>Moay – ơ bánh răng chủ động</td><td>1,35 d₁</td><td>1,35 × 28 = 37,8</td><td><b>38 mm</b></td></tr>
+<tr><td>Moay – ơ bánh răng bị dẫn</td><td>1,35 d₂</td><td>1,35 × 38 = 51,3</td><td><b>52 mm</b></td></tr>
+<tr><td>Moay – ơ bộ truyền ngoài</td><td>1,35 d₂</td><td>1,35 × 38 = 51,3</td><td><b>52 mm</b></td></tr>
+</table>
+
+<h3>Bước 4: Khoảng cách giữa hai ổ và các đoạn còn lại</h3>
+<div class="f sm"><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>L</mi><mo lspace="0.17em" rspace="0.17em">≈</mo><mrow><mn>2</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><msub><mrow><mi>l</mi></mrow><mrow><mtext>m2</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">+</mo><mrow><mn>2</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>e</mi><mo lspace="0.17em" rspace="0.17em">+</mo><mfrac><mrow><mi>w</mi></mrow><mrow><mrow><mn>2</mn></mrow></mrow></mfrac></mrow></mrow></math></div><div class="eq cont"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>2</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mrow><mn>52</mn></mrow><mo lspace="0.17em" rspace="0.17em">+</mo><mrow><mn>2</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>10</mn></mrow><mo lspace="0.17em" rspace="0.17em">+</mo><mfrac><mrow><mrow><mn>30</mn></mrow></mrow><mrow><mrow><mn>2</mn></mrow></mrow></mfrac></mrow></mrow></math></div><div class="eq cont"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>2</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>87</mn></mrow><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>174</mn></mrow><mspace width="0.2em"/><mtext>mm</mtext></mrow></math></div><div class="cm">e = 8 ÷ 15 mm → chọn 10 mm; &nbsp; w = chiều rộng mặt bích, chọn sơ bộ 30 mm</div><div class="src"><b>[NHL]</b> §8.3 <span class="pg">tr. 165</span> — khoảng cách sơ bộ giữa hai ổ trục; Bảng 8.2 <span class="pg">tr. 162</span> — chiều dài các đoạn trục.</div>
+  </div>
+
+<table>
+<tr><th>Đoạn</th><th>Công thức hoặc giới hạn</th><th>Chọn</th></tr>
+<tr><td>L<sub>01</sub> — đoạn đầu trục I</td><td>65 ÷ 100</td><td><b>100 mm</b></td></tr>
+<tr><td>L<sub>11</sub></td><td>55 ÷ 90</td><td><b>90 mm</b></td></tr>
+<tr><td>L<sub>1c</sub></td><td>>= 60 ÷ 80</td><td><b>100 mm</b></td></tr>
+<tr><td>L<sub>2c</sub></td><td>>= 60 ÷ 90</td><td><b>120 mm</b></td></tr>
+<tr><td>L<sub>21</sub></td><td>0,5w + x + 0,5l<sub>m2</sub></td><td>15 + 10 + 26 = <b>51 mm</b></td></tr>
+<tr><td>L<sub>22</sub></td><td>L − L<sub>21</sub></td><td>174 − 51 = <b>123 mm</b></td></tr>
+</table>
+
+<div class="box wrn">
+<h4>❌ Lỗi 5 thường gặp – lấy nhầm L₂₁ với L₂₂</h4>
+<p>Hai đoạn này <b>cộng lại bằng L</b>. Lấy nhầm thì mọi đòn tay phía sau đều sai theo,
+dẫn tới mô-men uốn sai và đường kính thiết kế sai.<br>
+<b>Cách khắc phục:</b> sau khi chọn, kiểm tra L<sub>21</sub> + L<sub>22</sub> = L và đối chiếu
+với sơ đồ chiều dài đã vẽ.</p>
+</div>
+
+<!-- ============ 3.1.5 ============ -->
+<h2 id="s7"><span class="no">7.</span>Mục 3.1.5 — Định kết cấu trục hợp lý <span class="tagx n2">N2</span></h2>
+
+<div class="gr g2">
+<div class="box lft">
+<h4>Nguyên tắc bố trí chi tiết</h4>
+<ol>
+<li>Chi tiết truyền động đặt <b>gần ổ nhất</b> → giảm đòn tay, giảm mô-men uốn.</li>
+<li>Các moay – ơ <b>không chồng lấn</b>, mỗi moay – ơ nằm trên một đoạn trục riêng.</li>
+<li>Tại vị trí chuyển tiết diện phải có <b>chiếu dài chuyển tiết diện</b> đủ lớn.</li>
+<li>Ở vị trí lắp ổ phải có đoạn trục đủ dài cho chiều rộng vòng ổ.</li>
+<li>Đầu trục có ren để siết; phải có đoạn trục để <b>khoan tâm</b>, không khoan tâm chỗ có rãnh then.</li>
+<li>Chi tiết đặt ngoài vỏ hộp phải có đoạn trụng đủ để lắp ổ từ phía ngoài.</li>
+</ol>
+</div>
+<div class="box wrn">
+<h4>❌ Lỗi 6 – trục không gia công được</h4>
+<p><b>Biểu hiện:</b> Ø lắp ổ nhỏ hơn Ø tại mặt cắt nguy hiểm; moay – ơ chồng lấn;
+không có chỗ khoan tâm.<br>
+<b>Nguyên nhân:</b> làm xong phần tính toán rồi mới vẽ, thay vì vẽ sơ đồ chiều dài <b>ngay từ đầu</b>.<br>
+<b>Cách khắc phục:</b> kiểm tra ba điều kiện ở mục 2 <b>trước khi</b> dựng mô hình 3D.</p>
+</div>
+</div>
+
+<div class="box">
+<h4>Nguyên tắc chiều dài chuyển tiết diện</h4>
+<p>Đoạn trục chuyển từ đường kính d1 sang d2 cần một "cầu nối" hộp trục để tạo góc chuyển tiết diện
+10° ÷ 15°. Quy tắc thực nghiệm: <b>chiều dài hộp trục <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mo lspace="0.17em" rspace="0.17em">≥</mo><mfrac><mrow><msub><mrow><mi>d</mi></mrow><mrow><mtext>max</mtext></mrow></msub></mrow><mrow><mrow><mrow><mn>2</mn></mrow><mspace width="0.2em"/><mtext>tan</mtext><mspace width="0.2em"/><mrow><mrow><mn>5</mn></mrow><mo lspace="0.17em" rspace="0.17em">°</mo></mrow></mrow></mrow></mfrac></mrow></math></b>.
+Hộp trục thường lấy bằng một trong các giá trị tiêu chuẩn 8 – 10 – 12 – 16 – 20 mm.</p>
+</div>
+
+<!-- ============ 3.1.6 ============ -->
+<h2 id="s8"><span class="no">8.</span>Mục 3.1.6 — Kiểm nghiệm trục theo độ bền mỏi <span class="tagx n1">N1</span></h2>
+
+<h3>Bước 1: Xác định dạng biến đổi ứng suất</h3>
+<table>
+<tr><th>Loại ứng suất</th><th>Dạng biến đổi</th><th>Hệ số</th></tr>
+<tr><td>Uốn (lực hướng tâm không đổi theo thời gian)</td><td><b>Đối xứng</b></td><td>Hệ số độ nhạy cảm theo biên độ ≈ 1</td></tr>
+<tr><td>Xoắn (mô-men xoắn truyền vào ra)</td><td><b>Mạch động</b></td><td>Hệ số độ nhạy cảm theo biên độ ≈ 0,5 ÷ 0,7</td></tr>
+</table>
+
+<h3>Bước 2: Tra các hệ số</h3>
+<table>
+<tr><th>Hệ số</th><th>Ý nghĩa</th><th>Tra theo</th><th>Giá trị ví dụ</th></tr>
+<tr><td><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>K</mi></mrow><mrow><mi>σ</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>K</mi></mrow><mrow><mi>τ</mi></mrow></msub></mrow></math></td><td>Hệ số tập trung ứng suất</td><td>Dạng rãnh, góc chuyển tiết diện, đường kính</td><td><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>K</mi></mrow><mrow><mi>σ</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>1</mn><mn>,8</mn></mrow></mrow></math>; <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>K</mi></mrow><mrow><mi>τ</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>1</mn><mn>,5</mn></mrow></mrow></math></td></tr>
+<tr><td><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>ε</mi></mrow><mrow><mi>σ</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>ε</mi></mrow><mrow><mi>τ</mi></mrow></msub></mrow></math></td><td>Hệ số kích thước</td><td>Đường kính trục</td><td><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>ε</mi></mrow><mrow><mi>σ</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>0</mn><mn>,88</mn></mrow></mrow></math>; <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>ε</mi></mrow><mrow><mi>τ</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>0</mn><mn>,81</mn></mrow></mrow></math></td></tr>
+<tr><td><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>ψ</mi></mrow><mrow><mi>σ</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>ψ</mi></mrow><mrow><mi>τ</mi></mrow></msub></mrow></math></td><td>Hệ số nhạy cảm theo độ nhám bề mặt</td><td>Loại gia công bề mặt</td><td><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>ψ</mi></mrow><mrow><mi>σ</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>0</mn><mn>,10</mn></mrow></mrow></math>; <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>ψ</mi></mrow><mrow><mi>τ</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>0</mn><mn>,05</mn></mrow></mrow></math></td></tr>
+<tr><td>K</td><td>Hệ số tương đương độ cứng bề mặt</td><td>Cánh tay hằng số của ứng suất</td><td><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>K</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>1</mn><mn>,8</mn></mrow></mrow></math></td></tr>
+</table>
+
+<h3>Bước 3: Giới hạn bền mỏi của vật liệu</h3>
+<div class="f sm"><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>σ</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mn>−1</mn><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>0</mn><mn>,45</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>σ</mi></mrow><mrow><mi>b</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>0</mn><mn>,45</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>900</mn></mrow><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>405</mn></mrow><mspace width="0.2em"/><msup><mrow><mtext>N/mm</mtext></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup></mrow></math></div><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>τ</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mn>−1</mn><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>0</mn><mn>,25</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>σ</mi></mrow><mrow><mi>b</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>0</mn><mn>,25</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>900</mn></mrow><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>225</mn></mrow><mspace width="0.2em"/><msup><mrow><mtext>N/mm</mtext></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup></mrow></math></div><div class="cm">Theo (11.17) sách dùng <b>dải giá trị</b> σ<sub>−1</sub> = (0,4 ÷ 0,5)σ<sub>b</sub> và τ<sub>r</sub> = (0,22 ÷ 0,25)σ<sub>b</sub>. Bài này lấy giá trị giữa. <b>Nếu muốn an toàn hơn thì lấy cận dưới: 0,4σ<sub>b</sub> và 0,22σ<sub>b</sub></b> — và phải nêu lý do trong thuyết minh.</div><div class="src"><b>[NHL]</b> công thức <b>(11.17)</b> <span class="pg">tr. 291</span> — <b>σ<sub>−1</sub> = (0,4 ÷ 0,5)σ<sub>b</sub></b> và <b>τ<sub>r</sub> = (0,22 ÷ 0,25)σ<sub>b</sub></b>, tra với mẫu thử đường kính 7 ÷ 10 mm.</div>
+  </div>
+
+<h3>Bước 4: Hệ số an toàn</h3>
+<div class="f"><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mrow><mi>s</mi></mrow><mrow><mi>σ</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mi>σ</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mn>−1</mn></mrow><mrow><msub><mrow><mi>σ</mi></mrow><mrow><mi>ε</mi></mrow></msub></mrow></mfrac><mspace width="0.2em"/><mtext>;</mtext><mspace width="0.2em"/><msub><mrow><mi>s</mi></mrow><mrow><mi>τ</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mi>τ</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mn>−1</mn></mrow><mrow><msub><mrow><mi>τ</mi></mrow><mrow><mi>ε</mi></mrow></msub></mrow></mfrac><mspace width="0.2em"/><mtext>;</mtext><mspace width="0.2em"/><mrow><mo fence="true" stretchy="true">[</mo><mrow><mi>s</mi></mrow><mo fence="true" stretchy="true">]</mo></mrow><mo lspace="0.17em" rspace="0.17em">=</mo><mtext>min</mtext><mspace width="0.2em"/><mrow><msub><mrow><mi>s</mi></mrow><mrow><mi>σ</mi></mrow></msub><mspace width="0.2em"/><mtext>;</mtext><mspace width="0.2em"/><msub><mrow><mi>s</mi></mrow><mrow><mi>τ</mi></mrow></msub></mrow></mrow></math></div><div class="src"><b>[NHL]</b> công thức <b>(11.14)</b> <span class="pg">tr. 291</span> — hệ số an toàn tổng hợp của trục truyền: s = s<sub>σ</sub>·s<sub>τ</sub> / √(s<sub>σ</sub>² + s<sub>τ</sub>²). Dạng rút gọn [s] = min(s<sub>σ</sub>; s<sub>τ</sub>) là cách lập bảo đảm an toàn.</div>
+  </div>
+<div class="f big"><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mrow><mo fence="true" stretchy="true">[</mo><mrow><mi>s</mi></mrow><mo fence="true" stretchy="true">]</mo></mrow><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>2</mn><mn>,5</mn></mrow><mo lspace="0.17em" rspace="0.17em">÷</mo><mrow><mn>3</mn></mrow><mspace width="0.2em"/><mtext>→</mtext><mspace width="0.2em"/><mtext>ĐẠT</mtext></mrow></math></div><div class="src"><b>[NHL]</b> §11.2 <span class="pg">tr. 291</span> — [s] = 1,5 ÷ 2,5 (thường lấy 1,5); <b>khi [s] = 2,5 ÷ 3 thì không cần kiểm nghiệm trục theo độ cứng</b>.</div>
+  </div>
+
+<div class="box acc">
+<p><b>Điều kiện tiết kiệm thời gian rất đáng nhớ:</b> khi [s] đạt trong khoảng <b>2,5 ÷ 3</b>
+thì theo giáo trình <b>không cần</b> kiểm tra thêm độ cứng vững ở mục 3.1.8.
+Tuy nhiên trong phần vấn đáp nên trả lời được câu hỏi "nếu phải kiểm tra thì kiểm tra thế nào"
+(xem mục 10).</p>
+</div>
+
+<div class="box wrn">
+<h4>❌ Lỗi 7 thường gặp</h4>
+<p><b>Biểu hiện:</b> lấy <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>s</mi></mrow><mrow><mi>σ</mi></mrow></msub></mrow></math> vì giá trị lớn hơn.<br>
+<b>Nguyên nhân:</b> quên rằng hệ số an toàn phải lấy <b>giá trị nhỏ nhất</b> — đó là mắt xích yếu nhất.<br>
+<b>Cách khắc phục:</b> luôn ghi cả hai giá trị rồi mới kết luận; và kiểm tra lại với mặt cắt có rãnh then
+vì K_σ ở đó lớn hơn nhiều.</p>
+</div>
+
+<!-- ============ 3.1.7 ============ -->
+<h2 id="s9"><span class="no">9.</span>Mục 3.1.7 — Kiểm nghiệm trục theo độ bền tĩnh <span class="tagx n1">N1</span></h2>
+
+<div class="box lft">
+<p><b>Kiểm tra gì?</b> Trục có chịu <b>tải tĩnh lớn nhất một lần</b> không: lúc khởi động, lúc trục bị kẹt
+(bánh răng ăn kẹt, xích kẹt), lúc thay chi tiết. Kiểm tra ở <b>mặt cắt có rãnh then</b>
+vì đó là mặt cắt yếu nhất về hình học.</p>
+</div>
+
+<div class="f big"><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mrow><mi>σ</mi></mrow><mrow><mi>t</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><msub><mrow><mi>K</mi></mrow><mrow><mi>σ</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>32</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>M</mi></mrow><mrow><mtext>max</mtext></mrow></msub></mrow><mrow><mrow><mi>π</mi><mo lspace="0.17em" rspace="0.17em">·</mo><msup><mrow><mi>d</mi></mrow><mrow><mrow><mn>3</mn></mrow></mrow></msup></mrow></mrow></mfrac><mo lspace="0.17em" rspace="0.17em">≤</mo><mrow><mo fence="true" stretchy="true">[</mo><mrow><mi>σ</mi></mrow><mo fence="true" stretchy="true">]</mo></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi></mi></mrow><mrow><mtext>tĩnh</mtext></mrow></msub></mrow></math></div><div class="src"><b>[GT]</b> — công thức kiểm độ bền tĩnh theo mục 3.1.7 đề cương; dạng đầy đủ của Nguyễn Hữu Lộc là công thức <b>(11.25)</b> <span class="pg">tr. 297</span>.</div>
+  </div>
+<div class="f sm"><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mrow><mi>M</mi></mrow><mrow><mtext>max</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><msqrt><mrow><msup><mrow><msub><mrow><mi>M</mi></mrow><mrow><mi>x</mi></mrow></msub></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup><mo lspace="0.17em" rspace="0.17em">+</mo><msup><mrow><msub><mrow><mi>M</mi></mrow><mrow><mi>y</mi></mrow></msub></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup></mrow></msqrt><mo lspace="0.17em" rspace="0.17em">=</mo><msqrt><mrow><msup><mrow><mrow><mn>48</mn><mspace width="0.15em"/><mn>247</mn><mn>,5</mn></mrow></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup><mo lspace="0.17em" rspace="0.17em">+</mo><msup><mrow><mrow><mn>173</mn><mspace width="0.15em"/><mn>579</mn><mn>,9</mn></mrow></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup></mrow></msqrt><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>180</mn><mspace width="0.15em"/><mn>164</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>N</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mtext>mm</mtext></mrow></math></div><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mrow><mo fence="true" stretchy="true">[</mo><mrow><mi>σ</mi></mrow><mo fence="true" stretchy="true">]</mo></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi></mi></mrow><mrow><mtext>tĩnh</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mrow><mn>0</mn><mn>,25</mn></mrow><mo lspace="0.17em" rspace="0.17em">÷</mo><mrow><mn>0</mn><mn>,4</mn></mrow></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>σ</mi></mrow><mrow><mi>b</mi></mrow></msub><mspace width="0.2em"/><mtext>→</mtext><mspace width="0.2em"/><mtext>chọn</mtext><mspace width="0.2em"/><mrow><mn>0</mn><mn>,3</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>900</mn></mrow><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>270</mn></mrow><mspace width="0.2em"/><mtext>MPa</mtext></mrow></math></div><div class="eq cont"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mrow><mi>σ</mi></mrow><mrow><mi>t</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mrow><mn>1</mn><mn>,8</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>32</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>180</mn><mspace width="0.15em"/><mn>164</mn></mrow></mrow><mrow><mrow><mi>π</mi><mo lspace="0.17em" rspace="0.17em">·</mo><msup><mrow><mrow><mn>30</mn></mrow></mrow><mrow><mrow><mn>3</mn></mrow></mrow></msup></mrow></mrow></mfrac></mrow></math></div><div class="eq cont"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>1</mn><mn>,8</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>67</mn><mn>,96</mn></mrow></mrow></math></div><div class="eq cont"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>122</mn><mn>,3</mn></mrow><mspace width="0.2em"/><mtext>MPa</mtext><mo lspace="0.17em" rspace="0.17em">≤</mo><mrow><mn>270</mn></mrow><mspace width="0.2em"/><mtext>MPa</mtext><mo lspace="0.17em" rspace="0.17em">✔</mo></mrow></math></div><div class="src"><b>[GT]</b> — bảng ứng suất cho phép theo mục 3.1.7 đề cương. <b>Lưu ý:</b> Nguyễn Hữu Lộc dùng quy ước khác là [σ]<sub>qt</sub> = 0,8·σ<sub>ch</sub> <span class="pg">tr. 297</span> — phải ghi rõ quy ước đang dùng trong bài.</div>
+  </div>
+
+<h3>Ở mặt cắt lắp ổ (không rãnh then)</h3>
+<div class="f res"><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mrow><mi>K</mi></mrow><mrow><mi>σ</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>1</mn></mrow><mspace width="0.2em"/><mtext>→</mtext><mspace width="0.2em"/><msub><mrow><mi>σ</mi></mrow><mrow><mi>t</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>67</mn><mn>,96</mn></mrow><mspace width="0.2em"/><mtext>MPa</mtext><mo lspace="0.17em" rspace="0.17em">≤</mo><mrow><mn>85</mn></mrow><mspace width="0.2em"/><mtext>MPa</mtext><mo lspace="0.17em" rspace="0.17em">✔</mo></mrow></math></div><div class="src"><b>[BM]</b> — số liệu thuyết minh mẫu, dùng để đối chiếu.</div>
+  </div>
+
+<div class="box navy">
+<h4>Điểm sinh viên hay sai nhất — hai ứng suất cho phép khác nhau</h4>
+<table style="background:transparent">
+<tr><th style="background:#1F4E79">Kiểm nghiệm</th><th style="background:#1F4E79">Dùng ứng suất cho phép</th><th style="background:#1F4E79">Giá trị</th></tr>
+<tr><td>Mỏi (3.1.6)</td><td><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mrow><mo fence="true" stretchy="true">[</mo><mrow><mi>σ</mi></mrow><mo fence="true" stretchy="true">]</mo></mrow></mrow></math> đã giảm sẵn cho vòng quay vô hạn</td><td>70 ÷ 90 MPa</td></tr>
+<tr><td>Tĩnh (3.1.7)</td><td>[σ]<sub>tĩnh</sub> lấy theo tỉ lệ với σ_b</td><td><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mrow><mn>0</mn><mn>,25</mn></mrow><mo lspace="0.17em" rspace="0.17em">÷</mo><mrow><mn>0</mn><mn>,4</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>σ</mi></mrow><mrow><mi>b</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>225</mn></mrow><mo lspace="0.17em" rspace="0.17em">÷</mo><mrow><mn>360</mn></mrow></mrow></math> MPa</td></tr>
+</table>
+<p style="color:#BFD6EC">Dùng nhầm hai giá trị này sẽ kết luận sai theo <b>cả hai chiều</b>:
+hoặc kết luận trục quá yếu rồi tăng Ø vô ích, hoặc kết luận thừa độ bền rồi bỏ qua rủi ro tĩnh.</p>
+</div>
+
+<div class="box wrn">
+<h4>❌ Lỗi 8 thường gặp</h4>
+<p><b>Biểu hiện:</b> dùng M_td (mô-men uốn tương đương) thay cho M_max khi kiểm nghiệm tĩnh.<br>
+<b>Nguyên nhân:</b> quên rằng M_td đã gộp cả mô-men xoắn với hệ số 0,75 — hệ số đó là
+<b>riêng cho bài toán mỏi</b>.<br>
+<b>Cách khắc phục:</b> kiểm tĩnh chỉ dùng <b>mô-men uốn thuần</b> <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>M</mi></mrow><mrow><mtext>max</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><msqrt><mrow><msup><mrow><msub><mrow><mi>M</mi></mrow><mrow><mi>x</mi></mrow></msub></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup><mo lspace="0.17em" rspace="0.17em">+</mo><msup><mrow><msub><mrow><mi>M</mi></mrow><mrow><mi>y</mi></mrow></msub></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup></mrow></msqrt></mrow></math>.</p>
+</div>
+
+<!-- ============ 3.1.8 ============ -->
+<h2 id="s10"><span class="no">10.</span>Mục 3.1.8 — Kiểm nghiệm trục theo độ cứng vững <span class="tagx n2">N2</span></h2>
+
+<div class="box lft">
+<p><b>Vì sao?</b> Trục quay nhanh mà võng sẽ làm bánh răng, bánh xích chạy lệch dần, sinh rung và rung động lớn.
+Đặc biệt đoạn trục <b>đặt ngoài vỏ hộp</b> chịu lực và độ võng lớn hơn phần trong hộp.</p>
+</div>
+
+<div class="f big"><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mrow><mi>f</mi></mrow><mrow><mtext>max</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><msub><mrow><mi>F</mi></mrow><mrow><mi>t</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">·</mo><msup><mrow><mi>L</mi></mrow><mrow><mrow><mn>3</mn></mrow></mrow></msup></mrow><mrow><mrow><mrow><mn>48</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>E</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mi>I</mi></mrow></mrow></mfrac><mo lspace="0.17em" rspace="0.17em">≤</mo><mrow><mo fence="true" stretchy="true">[</mo><mrow><mi>f</mi></mrow><mo fence="true" stretchy="true">]</mo></mrow></mrow></math></div><div class="src"><b>[GT]</b> — công thức kiểm độ cứng vững theo mục 3.1.8 đề cương.</div>
+  </div>
+<div class="f sm"><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>I</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mi>π</mi><mo lspace="0.17em" rspace="0.17em">·</mo><msup><mrow><mi>d</mi></mrow><mrow><mrow><mn>4</mn></mrow></mrow></msup></mrow><mrow><mrow><mn>64</mn></mrow></mrow></mfrac><mspace width="0.2em"/><mtext>;</mtext><mspace width="0.2em"/><mi>E</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>2</mn><mn>,1</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><msup><mrow><mrow><mn>10</mn></mrow></mrow><mrow><mrow><mn>5</mn></mrow></mrow></msup><mspace width="0.2em"/><mtext>MPa</mtext><mspace width="0.2em"/><mrow><mtext>thép</mtext></mrow><mspace width="0.2em"/><mtext>;</mtext><mspace width="0.2em"/><mrow><mo fence="true" stretchy="true">[</mo><mrow><mi>f</mi></mrow><mo fence="true" stretchy="true">]</mo></mrow><mo lspace="0.17em" rspace="0.17em">≈</mo><mfrac><mrow><mi>L</mi></mrow><mrow><mrow><mn>1</mn><mspace width="0.15em"/><mn>500</mn></mrow></mrow></mfrac><mo lspace="0.17em" rspace="0.17em">÷</mo><mfrac><mrow><mi>L</mi></mrow><mrow><mrow><mn>1</mn><mspace width="0.15em"/><mn>000</mn></mrow></mrow></mfrac></mrow></math></div><div class="src"><b>[NHL]</b> Bảng 11.2 <span class="pg">tr. 292</span>, công thức <b>(11.21)</b> — mô-men cản xoắn W<sub>o</sub> = πd³/16 của trục đặc.</div>
+  </div>
+
+<h3>Tính thử cho trục I</h3>
+<div class="f sm"><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mrow><mi>F</mi></mrow><mrow><mi>t</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>1</mn><mspace width="0.15em"/><mn>928</mn><mn>,7</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>N</mi><mspace width="0.2em"/><mtext>;</mtext><mspace width="0.2em"/><mi>L</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>174</mn></mrow><mspace width="0.2em"/><mtext>mm</mtext><mspace width="0.2em"/><mtext>;</mtext><mspace width="0.2em"/><mi>d</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>30</mn></mrow><mspace width="0.2em"/><mtext>mm</mtext></mrow></math></div><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>I</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mi>π</mi><mo lspace="0.17em" rspace="0.17em">·</mo><msup><mrow><mrow><mn>30</mn></mrow></mrow><mrow><mrow><mn>4</mn></mrow></mrow></msup></mrow><mrow><mrow><mn>64</mn></mrow></mrow></mfrac><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>39</mn><mspace width="0.15em"/><mn>761</mn></mrow><mspace width="0.2em"/><msup><mrow><mtext>mm</mtext></mrow><mrow><mrow><mn>4</mn></mrow></mrow></msup></mrow></math></div><div class="eq cont"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mrow><mi>f</mi></mrow><mrow><mtext>max</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mrow><mn>1</mn><mspace width="0.15em"/><mn>928</mn><mn>,7</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><msup><mrow><mrow><mn>174</mn></mrow></mrow><mrow><mrow><mn>3</mn></mrow></mrow></msup></mrow><mrow><mrow><mrow><mn>48</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>2</mn><mn>,1</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><msup><mrow><mrow><mn>10</mn></mrow></mrow><mrow><mrow><mn>5</mn></mrow></mrow></msup><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>39</mn><mspace width="0.15em"/><mn>761</mn></mrow></mrow></mrow></mfrac></mrow></math></div><div class="eq cont"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mrow><mn>1</mn><mn>,016</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><msup><mrow><mrow><mn>10</mn></mrow></mrow><mrow><mrow><mn>10</mn></mrow></mrow></msup></mrow><mrow><mrow><mn>4</mn><mn>,008</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><msup><mrow><mrow><mn>10</mn></mrow></mrow><mrow><mrow><mn>11</mn></mrow></mrow></msup></mrow></mfrac></mrow></math></div><div class="eq cont"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>0</mn><mn>,0254</mn></mrow><mspace width="0.2em"/><mtext>mm</mtext></mrow></math></div><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mrow><mo fence="true" stretchy="true">[</mo><mrow><mi>f</mi></mrow><mo fence="true" stretchy="true">]</mo></mrow><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mrow><mn>174</mn></mrow></mrow><mrow><mrow><mn>1</mn><mspace width="0.15em"/><mn>500</mn></mrow></mrow></mfrac><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>0</mn><mn>,116</mn></mrow><mspace width="0.2em"/><mtext>mm</mtext><mspace width="0.2em"/><mrow><mtext>điều</mtext><mspace width="0.2em"/><mtext>kiện</mtext><mspace width="0.2em"/><mtext>chặt</mtext></mrow></mrow></math></div><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mrow><mo fence="true" stretchy="true">[</mo><mrow><mi>f</mi></mrow><mo fence="true" stretchy="true">]</mo></mrow><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mrow><mn>174</mn></mrow></mrow><mrow><mrow><mn>1</mn><mspace width="0.15em"/><mn>000</mn></mrow></mrow></mfrac><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>0</mn><mn>,174</mn></mrow><mspace width="0.2em"/><mtext>mm</mtext><mspace width="0.2em"/><mrow><mtext>điều</mtext><mspace width="0.2em"/><mtext>kiện</mtext><mspace width="0.2em"/><mtext>dãn</mtext></mrow></mrow></math></div><div class="src"><b>[BM]</b> — số liệu thuyết minh mẫu.</div>
+  </div>
+<div class="f res"><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mrow><mn>0</mn><mn>,0254</mn></mrow><mspace width="0.2em"/><mtext>mm</mtext><mo lspace="0.17em" rspace="0.17em">≤</mo><mrow><mn>0</mn><mn>,116</mn></mrow><mspace width="0.2em"/><mtext>mm</mtext><mspace width="0.2em"/><mtext>→</mtext><mspace width="0.2em"/><mtext>ĐẠT</mtext></mrow></math></div><div class="src"><b>[BM]</b> — số liệu thuyết minh mẫu.</div>
+  </div>
+
+<div class="box acc">
+<p>Độ võng nhỏ hơn điều kiện cho phép khoảng <b>4,6 lần</b> → trục đủ cứng vững.
+Nguyên nhân là đoạn cần xét ngắn (<math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>L</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>174</mn></mrow></mrow></math> mm) và Ø tương đối lớn so với lực tác dụng.</p>
+</div>
+
+<div class="box wrn">
+<h4>❌ Lỗi 9 thường gặp</h4>
+<p><b>Biểu hiện:</b> dùng nhầm <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>F</mi></mrow><mrow><mi>t</mi></mrow></msub></mrow></math> thay vì hợp lực hướng tâm <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>F</mi></mrow><mrow><mi>r</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><msqrt><mrow><msup><mrow><msub><mrow><mi>F</mi></mrow><mrow><mi>t</mi></mrow></msub></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup><mo lspace="0.17em" rspace="0.17em">+</mo><msup><mrow><msub><mrow><mi>F</mi></mrow><mrow><mi>r</mi></mrow></msub></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup></mrow></msqrt></mrow></math> làm lực gây võng.<br>
+<b>Cách khắc phục:</b> lực gây võng trong mặt phẳng là <b>hợp lực</b> của lực vòng và lực hướng tâm,
+không phải lực vòng đơn thuần.</p>
+</div>
+
+<!-- ============ 3.2.1 ============ -->
+<h2 id="s11"><span class="no">11.</span>Mục 3.2.1 — Chọn phương án bố trí ổ lăn <span class="tagx n2">N2</span></h2>
+
+<h3>Bốn câu hỏi phải trả lời theo thứ tự</h3>
+<ol>
+<li><b>Trục có chịu lực dọc trục không?</b> Lắp bánh răng côn → có <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>F</mi></mrow><mrow><mi>a</mi></mrow></msub></mrow></math> → bắt buộc dùng ổ loại chịu tải dọc.</li>
+<li><b>Ổ nào phải chịu tải lớn hơn?</b> Ổ gần bộ truyền ngoài chịu tải lớn hơn → bố trí cho hợp lý.</li>
+<li><b>Bố trí chung hay bố trí riêng?</b></li>
+<li><b>Ø lắp ổ là bao nhiêu?</b> → quyết định ký hiệu ổ.</li>
+</ol>
+
+<h3>Chọn loại ổ</h3>
+<table>
+<tr><th>Điều kiện</th><th>Loại ổ</th><th>Ghi chú</th></tr>
+<tr><td>Không có F_a</td><td>Ổ bi đơn hàng, ổ bi kép</td><td>Chỉ chịu tải hướng tâm</td></tr>
+<tr><td>Có <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>F</mi></mrow><mrow><mi>a</mi></mrow></msub></mrow></math> nhỏ</td><td>Ổ bi đầu đũa</td><td>Chịu tải dọc giới hạn, cần con chốt chặn</td></tr>
+<tr><td><b>Có <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>F</mi></mrow><mrow><mi>a</mi></mrow></msub></mrow></math> lớn</b></td><td><b>Ổ đũa côn</b></td><td>Chịu tải dọc tốt nhất, tách ổ rời được</td></tr>
+</table>
+<p>Trong ví dụ này cả hai trục đều mang bánh răng côn → chọn <b>ổ đũa côn một dãy, góc <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>α</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>12</mn></mrow><mo lspace="0.17em" rspace="0.17em">°</mo></mrow></math></b>.</p>
+
+<h3>Bố trí chung và bố trí riêng</h3>
+<table>
+<tr><th></th><th>Bố trí chung</th><th>Bố trí riêng</th></tr>
+<tr><td><b>Cấu tạo</b></td><td>Hai ổ cùng một phía vỏ hộp</td><td>Hai ổ hai phía vỏ hộp</td></tr>
+<tr><td><b>Ưu điểm</b></td><td>Vỏ hộp đơn giản, rẻ, dễ gia công</td><td>Cứng vững, chịu tải tốt hơn</td></tr>
+<tr><td><b>Nhược điểm</b></td><td>Chịu tải dọc kém, khó thay ổ</td><td>Vỏ hộp phức tạp, đắt hơn</td></tr>
+<tr><td><b>Dùng khi</b></td><td>Tải nhỏ, trục ngắn</td><td>Tải lớn, trục dài, cần độ cứng cao</td></tr>
+</table>
+
+<h3>Chọn ký hiệu theo Ø lắp</h3>
+<table>
+<tr><th>Trục</th><th>Ø lắp ổ</th><th>Ký hiệu</th><th><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>C</mi></mrow></math> (N)</th><th><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>C</mi></mrow><mrow><mn>0</mn></mrow></msub></mrow></math> (N)</th></tr>
+<tr><td>I</td><td>30 mm</td><td><b>7206</b></td><td>31 000</td><td>22 000</td></tr>
+<tr><td>II</td><td>35 mm</td><td><b>7207</b></td><td>38 000</td><td>26 000</td></tr>
+</table>
+<div class="note">Nếu ổ không đủ khả năng tải, phải chọn cỡ lớn hơn rồi <b>quay lại</b> kiểm tra kết cấu trục
+vì Ø lắp ảnh hưởng đến moay – ơ và sơ đồ chiều dài.</div>
+
+<!-- ============ 3.2.2 / 3.2.3 ============ -->
+<h2 id="s12"><span class="no">12.</span>Mục 3.2.2 và 3.2.3 — Tính ổ theo tải tĩnh và tải động <span class="tagx n2">N2</span></h2>
+
+<div class="gr g2">
+<div class="box lft">
+<h4>3.2.3 — Tính ổ theo khả năng tải tĩnh</h4>
+<p>Lực hướng tâm tác dụng lên ổ là <b>hợp lực</b> của lực vòng và lực hướng tâm của bộ truyền:</p>
+<div class="f sm"><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mrow><mi>F</mi></mrow><mrow><mi>r</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><msqrt><mrow><msup><mrow><msub><mrow><mi>F</mi></mrow><mrow><mi>t</mi></mrow></msub></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup><mo lspace="0.17em" rspace="0.17em">+</mo><msup><mrow><msub><mrow><mi>F</mi></mrow><mrow><mi>r</mi></mrow></msub></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup></mrow></msqrt><mo lspace="0.17em" rspace="0.17em">=</mo><msqrt><mrow><msup><mrow><mrow><mn>1</mn><mspace width="0.15em"/><mn>928</mn><mn>,7</mn></mrow></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup><mo lspace="0.17em" rspace="0.17em">+</mo><msup><mrow><mrow><mn>653</mn><mn>,2</mn></mrow></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup></mrow></msqrt><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>2</mn><mspace width="0.15em"/><mn>036</mn><mn>,3</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>N</mi></mrow></math></div><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mrow><mi>Q</mi></mrow><mrow><mn>0</mn></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><msub><mrow><mi>X</mi></mrow><mrow><mn>0</mn></mrow></msub><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>F</mi></mrow><mrow><mi>r</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">+</mo><msub><mrow><mi>Y</mi></mrow><mrow><mn>0</mn></mrow></msub><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>F</mi></mrow><mrow><mi>a</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">≤</mo><msub><mrow><mi>C</mi></mrow><mrow><mn>0</mn></mrow></msub></mrow></math></div><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>Ổ</mi><mspace width="0.2em"/><mtext>đũa</mtext><mspace width="0.2em"/><mtext>côn</mtext><mspace width="0.2em"/><mrow><mn>1</mn></mrow><mspace width="0.2em"/><mtext>dãy</mtext><mspace width="0.2em"/><mi>α</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>12</mn></mrow><mo lspace="0.17em" rspace="0.17em">°</mo><mspace width="0.2em"/><mtext>:</mtext><mspace width="0.2em"/><msub><mrow><mi>X</mi></mrow><mrow><mn>0</mn></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>0</mn><mn>,5</mn></mrow><mspace width="0.2em"/><mtext>;</mtext><mspace width="0.2em"/><msub><mrow><mi>Y</mi></mrow><mrow><mn>0</mn></mrow></msub><mo lspace="0.17em" rspace="0.17em">≈</mo><mrow><mn>1</mn><mn>,04</mn></mrow></mrow></math></div><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mrow><mi>Q</mi></mrow><mrow><mn>0</mn></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>0</mn><mn>,5</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>2</mn><mspace width="0.15em"/><mn>036</mn><mn>,3</mn></mrow><mo lspace="0.17em" rspace="0.17em">+</mo><mrow><mn>1</mn><mn>,04</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>248</mn><mn>,0</mn></mrow><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>1</mn><mspace width="0.15em"/><mn>276</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>N</mi></mrow></math></div><div class="src"><b>[NHL]</b> §9.4 <span class="pg">tr. 228</span> — lựa chọn ổ lăn; lực hướng tâm phải lấy theo hợp lực của F<sub>t</sub> và F<sub>r</sub>.</div>
+  </div>
+<div class="f big"><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mrow><mn>1</mn><mspace width="0.15em"/><mn>276</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>N</mi><mo lspace="0.17em" rspace="0.17em">≤</mo><msub><mrow><mi>C</mi></mrow><mrow><mn>0</mn></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>22</mn><mspace width="0.15em"/><mn>000</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>N</mi><mspace width="0.2em"/><mtext>→</mtext><mspace width="0.2em"/><mtext>ĐẠT</mtext></mrow></math></div><div class="src"><b>[BM]</b> — số liệu thuyết minh mẫu.</div>
+  </div>
+</div>
+
+<div class="box ln2">
+<h4>3.2.2 — Tính ổ theo khả năng tải động</h4>
+<p>Tải động quy ước lớn hơn tải tĩnh, dùng để xác định <b>tuổi thọ</b>:</p>
+<div class="f sm"><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>Q</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mi>X</mi><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>F</mi></mrow><mrow><mi>r</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">+</mo><mi>Y</mi><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>F</mi></mrow><mrow><mi>a</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">≤</mo><mi>C</mi></mrow></math></div><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>X</mi><mo lspace="0.17em" rspace="0.17em">≈</mo><mrow><mn>0</mn><mn>,56</mn></mrow><mspace width="0.2em"/><mtext>;</mtext><mspace width="0.2em"/><mi>Y</mi><mo lspace="0.17em" rspace="0.17em">≈</mo><mrow><mn>1</mn><mn>,7</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>Y</mi></mrow><mrow><mn>0</mn></mrow></msub></mrow></math></div><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>Q</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>0</mn><mn>,56</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>2</mn><mspace width="0.15em"/><mn>036</mn><mn>,3</mn></mrow><mo lspace="0.17em" rspace="0.17em">+</mo><mrow><mn>1</mn><mn>,7</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>1</mn><mn>,04</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>248</mn><mn>,0</mn></mrow><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>1</mn><mspace width="0.15em"/><mn>578</mn><mn>,8</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>N</mi></mrow></math></div><div class="src"><b>[NHL]</b> §9.4 <span class="pg">tr. 228</span> — công thức tải động Q = X·F<sub>r</sub> + Y·F<sub>a</sub> ≤ C.</div>
+  </div>
+<div class="f big"><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mrow><mn>1</mn><mspace width="0.15em"/><mn>578</mn><mn>,8</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>N</mi><mo lspace="0.17em" rspace="0.17em">≤</mo><mi>C</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>31</mn><mspace width="0.15em"/><mn>000</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>N</mi><mspace width="0.2em"/><mtext>→</mtext><mspace width="0.2em"/><mtext>ĐẠT</mtext></mrow></math></div><div class="src"><b>[BM]</b> — số liệu thuyết minh mẫu.</div>
+  </div>
+<p style="margin-top:8px;font-size:13.5px">Sau đó tính <b>tuổi thọ</b> từ Q và số vòng quay n, so sánh với
+L<sub>h</sub> = 24 000 giờ yêu cầu.</p>
+</div>
+</div>
+
+<div class="box navy">
+<p><b>Đọc kết quả biên dự phòng lớn như thế nào?</b>
+Ổ thường được chọn theo đường kính lắp chứ không theo tải, nên tải thực luôn thấp hơn nhiều khả năng.
+Biên dự phòng lớn là <b>bình thường và tốt</b>. Giá trị của việc trình bày hai phép kiểm tra là
+<b>bằng chứng cho thấy đã kiểm chứng</b>, chứ không phải để tìm ra sai sót.</p>
+</div>
+
+<div class="box wrn">
+<h4>❌ Lỗi 10 thường gặp</h4>
+<p><b>Biểu hiện:</b> chọn ổ theo đường kính rồi coi như xong, không tính Q.<br>
+<b>Cách khắc phục:</b> luôn trình bày đủ <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>Q</mi></mrow><mrow><mn>0</mn></mrow></msub><mo lspace="0.17em" rspace="0.17em">≤</mo><msub><mrow><mi>C</mi></mrow><mrow><mn>0</mn></mrow></msub></mrow></math> và <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>Q</mi><mo lspace="0.17em" rspace="0.17em">≤</mo><mi>C</mi></mrow></math>, kể cả khi biên dự phòng rất lớn.</p>
+</div>
+
+<!-- ============ 3.3 ============ -->
+<h2 id="s13"><span class="no">13.</span>Mục 3.3 — Tính chọn then <span class="tagx n2">N2</span></h2>
+
+<h3>Bảng chọn then theo đường kính lắp ghép (tra theo phụ lục)</h3>
+<table>
+<tr><th>Ø lắp ghép (mm)</th><th><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>b</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mi>h</mi></mrow></math> (mm)</th></tr>
+<tr><td>17 ÷ 22</td><td>6 × 6</td></tr>
+<tr><td>&gt; 22 ÷ 30</td><td>8 × 7</td></tr>
+<tr><td>&gt; 30 ÷ 38</td><td>10 × 8</td></tr>
+<tr><td>&gt; 38 ÷ 44</td><td>12 × 8</td></tr>
+<tr><td>&gt; 44 ÷ 50</td><td>14 × 9</td></tr>
+<tr><td>&gt; 50 ÷ 58</td><td>16 × 10</td></tr>
+</table>
+<p><b>Ký hiệu then</b> ghi A <i>b</i> × <i>h</i> × <i>l</i> — chữ A là then thẳng (có đầu tròn).</p>
+
+<h3>Chọn chiều dài then</h3>
+<p>Chiều dài then <b>ngắn hơn moay – ơ từ 5 đến 10 mm mỗi đầu</b>, để còn mặt bích tựa cho chi tiết ghép.
+Sau đó chọn theo dãy chiều dài tiêu chuẩn: 28 – 32 – 36 – 40 – 45 – 50 – 56 – 63 – 70 – 80 mm.</p>
+
+<h3>Kết quả chọn cho ví dụ</h3>
+<table>
+<tr><th>Vị trí lắp</th><th>Ø</th><th><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>b</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mi>h</mi></mrow></math></th><th>l<sub>m</sub></th><th>l then</th><th>Ký hiệu</th></tr>
+<tr><td>Khớp nối – trục I</td><td>25</td><td>8 × 7</td><td>42</td><td>36</td><td>A 8×7×<b>36</b></td></tr>
+<tr><td>Bánh răng chủ động – I</td><td>22</td><td>8 × 7</td><td>38</td><td>28</td><td>A 8×7×<b>28</b></td></tr>
+<tr><td>Bộ truyền ngoài – II</td><td>28</td><td>8 × 7</td><td>52</td><td>45</td><td>A 8×7×<b>45</b></td></tr>
+<tr><td>Bánh răng bị dẫn – II</td><td>40</td><td>12 × 8</td><td>52</td><td>45</td><td>A 12×8×<b>45</b></td></tr>
+</table>
+<p>Vật liệu then: <b>thép 45</b>.</p>
+
+<h3>Kiểm nghiệm bền dập và bền cắt</h3>
+<div class="f"><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mrow><mi>t</mi></mrow><mrow><mn>2</mn></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>0</mn><mn>,4</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>h</mi><mspace width="0.2em"/><mtext>;</mtext><mspace width="0.2em"/><mrow><mtext>chiều</mtext><mspace width="0.2em"/><mtext>sâu</mtext><mspace width="0.2em"/><mtext>rãnh</mtext><mspace width="0.2em"/><mtext>then</mtext><mspace width="0.2em"/><mtext>trên</mtext><mspace width="0.2em"/><mtext>mayơ</mtext></mrow></mrow></math></div><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mrow><mi>l</mi></mrow><mrow><mn>1</mn></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mi>l</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mo lspace="0.17em" rspace="0.17em">−</mo><mi>b</mi></mrow><mspace width="0.2em"/><mtext>;</mtext><mspace width="0.2em"/><mrow><mtext>chiều</mtext><mspace width="0.2em"/><mtext>dài</mtext><mspace width="0.2em"/><mtext>làm</mtext><mspace width="0.2em"/><mtext>việc</mtext><mspace width="0.2em"/><mtext>của</mtext><mspace width="0.2em"/><mtext>then</mtext></mrow></mrow></math></div><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mtext>Bền</mtext><mspace width="0.2em"/><mtext>dập</mtext><mspace width="0.2em"/><mtext>:</mtext><mspace width="0.2em"/><msub><mrow><mi>σ</mi></mrow><mrow><mi>d</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mrow><mn>2</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>T</mi></mrow><mrow><mrow><mi>d</mi><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>t</mi></mrow><mrow><mn>2</mn></mrow></msub><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>l</mi></mrow><mrow><mn>1</mn></mrow></msub></mrow></mrow></mfrac><mo lspace="0.17em" rspace="0.17em">≤</mo><mrow><mo fence="true" stretchy="true">[</mo><mrow><msub><mrow><mi>σ</mi></mrow><mrow><mi>d</mi></mrow></msub></mrow><mo fence="true" stretchy="true">]</mo></mrow></mrow></math></div><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mtext>Bền</mtext><mspace width="0.2em"/><mtext>cắt</mtext><mspace width="0.2em"/><mtext>:</mtext><mspace width="0.2em"/><msub><mrow><mi>τ</mi></mrow><mrow><mi>c</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mrow><mn>2</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>T</mi></mrow><mrow><mrow><mi>d</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mi>b</mi><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>l</mi></mrow><mrow><mn>1</mn></mrow></msub></mrow></mrow></mfrac><mo lspace="0.17em" rspace="0.17em">≤</mo><mrow><mo fence="true" stretchy="true">[</mo><mrow><msub><mrow><mi>τ</mi></mrow><mrow><mi>c</mi></mrow></msub></mrow><mo fence="true" stretchy="true">]</mo></mrow></mrow></math></div><div class="src"><b>[NHL]</b> §11.3 <span class="pg">tr. 299</span> — tính toán kiểm nghiệm then; công thức bền dập và bền cắt tại <span class="pg">tr. 301</span>.</div>
+  </div>
+
+<h4>Ví dụ — bộ truyền ngoài trên trục II</h4>
+<div class="f sm"><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>d</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>28</mn></mrow><mspace width="0.2em"/><mtext>;</mtext><mspace width="0.2em"/><mi>b</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>8</mn></mrow><mspace width="0.2em"/><mtext>;</mtext><mspace width="0.2em"/><mi>h</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>7</mn></mrow><mspace width="0.2em"/><mtext>;</mtext><mspace width="0.2em"/><mi>l</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>45</mn></mrow><mspace width="0.2em"/><mtext>;</mtext><mspace width="0.2em"/><mi>T</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>197</mn><mspace width="0.15em"/><mn>153</mn><mn>,35</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>N</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mtext>mm</mtext></mrow></math></div><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mrow><mi>t</mi></mrow><mrow><mn>2</mn></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>0</mn><mn>,4</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>7</mn></mrow><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>2</mn><mn>,8</mn></mrow><mspace width="0.2em"/><mtext>mm</mtext></mrow></math></div><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mrow><mi>l</mi></mrow><mrow><mn>1</mn></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>45</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mn>−8</mn><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>37</mn></mrow><mspace width="0.2em"/><mtext>mm</mtext></mrow></math></div><div class="eq cont"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mrow><mi>σ</mi></mrow><mrow><mi>d</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mrow><mn>2</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>197</mn><mspace width="0.15em"/><mn>153</mn><mn>,35</mn></mrow></mrow><mrow><mrow><mrow><mn>28</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>2</mn><mn>,8</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>37</mn></mrow></mrow></mrow></mfrac><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mrow><mn>394</mn><mspace width="0.15em"/><mn>306</mn><mn>,7</mn></mrow></mrow><mrow><mrow><mn>2</mn><mspace width="0.15em"/><mn>900</mn><mn>,8</mn></mrow></mrow></mfrac><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>135</mn><mn>,9</mn></mrow><mspace width="0.2em"/><mtext>MPa</mtext><mo lspace="0.17em" rspace="0.17em">≤</mo><mrow><mo fence="true" stretchy="true">[</mo><mrow><msub><mrow><mi>σ</mi></mrow><mrow><mi>d</mi></mrow></msub></mrow><mo fence="true" stretchy="true">]</mo></mrow><mo lspace="0.17em" rspace="0.17em">✔</mo></mrow></math></div><div class="eq cont"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mrow><mi>τ</mi></mrow><mrow><mi>c</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mrow><mn>2</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>197</mn><mspace width="0.15em"/><mn>153</mn><mn>,35</mn></mrow></mrow><mrow><mrow><mrow><mn>28</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>8</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>37</mn></mrow></mrow></mrow></mfrac><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mrow><mn>394</mn><mspace width="0.15em"/><mn>306</mn><mn>,7</mn></mrow></mrow><mrow><mrow><mn>8</mn><mspace width="0.15em"/><mn>288</mn></mrow></mrow></mfrac><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>47</mn><mn>,6</mn></mrow><mspace width="0.2em"/><mtext>MPa</mtext><mo lspace="0.17em" rspace="0.17em">≤</mo><mrow><mo fence="true" stretchy="true">[</mo><mrow><msub><mrow><mi>τ</mi></mrow><mrow><mi>c</mi></mrow></msub></mrow><mo fence="true" stretchy="true">]</mo></mrow><mo lspace="0.17em" rspace="0.17em">✔</mo></mrow></math></div><div class="src"><b>[NHL]</b> §11.3 <span class="pg">tr. 301</span>.</div>
+  </div>
+
+<h4>Ví dụ — bánh răng bị dẫn trên trục II</h4>
+<div class="f sm"><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>d</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>40</mn></mrow><mspace width="0.2em"/><mtext>;</mtext><mspace width="0.2em"/><mi>b</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>12</mn></mrow><mspace width="0.2em"/><mtext>;</mtext><mspace width="0.2em"/><mi>h</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>8</mn></mrow><mspace width="0.2em"/><mtext>;</mtext><mspace width="0.2em"/><mi>l</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>45</mn></mrow><mspace width="0.2em"/><mtext>;</mtext><mspace width="0.2em"/><mi>T</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>197</mn><mspace width="0.15em"/><mn>153</mn><mn>,35</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>N</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mtext>mm</mtext></mrow></math></div><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mrow><mi>t</mi></mrow><mrow><mn>2</mn></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>0</mn><mn>,4</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>8</mn></mrow><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>3</mn><mn>,2</mn></mrow><mspace width="0.2em"/><mtext>mm</mtext></mrow></math></div><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mrow><mi>l</mi></mrow><mrow><mn>1</mn></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>45</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mn>−12</mn><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>33</mn></mrow><mspace width="0.2em"/><mtext>mm</mtext></mrow></math></div><div class="eq cont"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mrow><mi>σ</mi></mrow><mrow><mi>d</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mrow><mn>2</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>197</mn><mspace width="0.15em"/><mn>153</mn><mn>,35</mn></mrow></mrow><mrow><mrow><mrow><mn>40</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>3</mn><mn>,2</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>33</mn></mrow></mrow></mrow></mfrac><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mrow><mn>394</mn><mspace width="0.15em"/><mn>306</mn><mn>,7</mn></mrow></mrow><mrow><mrow><mn>4</mn><mspace width="0.15em"/><mn>224</mn></mrow></mrow></mfrac><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>93</mn><mn>,3</mn></mrow><mspace width="0.2em"/><mtext>MPa</mtext><mo lspace="0.17em" rspace="0.17em">≤</mo><mrow><mo fence="true" stretchy="true">[</mo><mrow><msub><mrow><mi>σ</mi></mrow><mrow><mi>d</mi></mrow></msub></mrow><mo fence="true" stretchy="true">]</mo></mrow><mo lspace="0.17em" rspace="0.17em">✔</mo></mrow></math></div><div class="eq cont"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mrow><mi>τ</mi></mrow><mrow><mi>c</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mrow><mn>2</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>197</mn><mspace width="0.15em"/><mn>153</mn><mn>,35</mn></mrow></mrow><mrow><mrow><mrow><mn>40</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>12</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>33</mn></mrow></mrow></mrow></mfrac><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mrow><mn>394</mn><mspace width="0.15em"/><mn>306</mn><mn>,7</mn></mrow></mrow><mrow><mrow><mn>15</mn><mspace width="0.15em"/><mn>840</mn></mrow></mrow></mfrac><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>24</mn><mn>,9</mn></mrow><mspace width="0.2em"/><mtext>MPa</mtext><mo lspace="0.17em" rspace="0.17em">≤</mo><mrow><mo fence="true" stretchy="true">[</mo><mrow><msub><mrow><mi>τ</mi></mrow><mrow><mi>c</mi></mrow></msub></mrow><mo fence="true" stretchy="true">]</mo></mrow><mo lspace="0.17em" rspace="0.17em">✔</mo></mrow></math></div><div class="src"><b>[NHL]</b> §11.3 <span class="pg">tr. 301</span>.</div>
+  </div>
+
+<div class="box wrn">
+<h4>❌ Lỗi 11 thường gặp</h4>
+<p><b>Biểu hiện:</b> chọn chiều dài then bằng đúng chiều dài moay – ơ → then tràn ra ngoài mặt bích,
+khó lắp, mất cân đối.<br>
+<b>Nguyên nhân:</b> bỏ qua yêu cầu rút ngắn hai đầu; hoặc tra bảng then theo Ø sơ bộ của trục
+thay vì theo Ø lắp ghép thật tại vị trí đó.<br>
+<b>Cách khắc phục:</b> luôn tra bảng then theo <b>Ø lắp ghép của từng vị trí</b>.</p>
+</div>
+
+<!-- ============ 3.4 ============ -->
+<h2 id="s14"><span class="no">14.</span>Mục 3.4 — Tính chọn khớp nối <span class="tagx n2">N2</span></h2>
+
+<h3>Bước 1: Mô-men xoắn khớp nối</h3>
+<div class="f big"><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mrow><mi>M</mi></mrow><mrow><mtext>tkn</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>1</mn><mn>,35</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>T</mi></mrow></math></div><div class="src"><b>[GT]</b> — hệ số tăng mô-men do tải động, mục 3.4 đề cương. Nguyễn Hữu Lộc dùng cách khác: K<sub>0</sub> = T<sub>max</sub>/T <span class="pg">tr. 296</span>.</div>
+  </div>
+<div class="f sm"><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mrow><mi>M</mi></mrow><mrow><mtext>tkn</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>1</mn><mn>,35</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>81</mn><mspace width="0.15em"/><mn>864</mn><mn>,175</mn></mrow><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>110</mn><mspace width="0.15em"/><mn>516</mn><mn>,6</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>N</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mtext>mm</mtext><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>110</mn><mn>,5</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>N</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mi>m</mi></mrow></math></div><div class="src"><b>[GT]</b> — mục 3.4 đề cương.</div>
+  </div>
+<p>Hệ số 1,35 nằm trên 1 vì khớp nối phải chịu cả sai lệch lắp ghép và va đập khi khởi động.</p>
+
+<h3>Bước 2: Lực tác dụng lên trục tại khớp nối</h3>
+<div class="f sm"><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mrow><mi>F</mi></mrow><mrow><mtext>tkn</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mrow><mn>2</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>M</mi></mrow><mrow><mtext>tkn</mtext></mrow></msub></mrow><mrow><msub><mrow><mi>D</mi></mrow><mrow><mn>0</mn></mrow></msub></mrow></mfrac><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mrow><mn>2</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>110</mn><mspace width="0.15em"/><mn>516</mn><mn>,6</mn></mrow></mrow><mrow><mrow><mn>120</mn></mrow></mrow></mfrac><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>1</mn><mspace width="0.15em"/><mn>841</mn><mn>,9</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>N</mi></mrow></math></div><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mrow><mi>F</mi></mrow><mrow><mtext>rkn</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>0</mn><mn>,25</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>F</mi></mrow><mrow><mtext>tkn</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>0</mn><mn>,25</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>1</mn><mspace width="0.15em"/><mn>841</mn><mn>,9</mn></mrow><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>460</mn><mn>,5</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>N</mi></mrow></math></div><div class="src"><b>[GT]</b> — mục 3.4 đề cương.</div>
+  </div>
+<p>Đây chính là hai lực đã xuất hiện trên sơ đồ lực ở mục 3.1.3.</p>
+
+<h3>Bước 3: Tra bảng chọn khớp nối</h3>
+<table>
+<tr><th>Moment xoắn (N·m)</th><th>d (mm)</th><th>D₀ (mm)</th><th>d<sub>m</sub> (mm)</th><th>l₁ (mm)</th><th>l₂ (mm)</th></tr>
+<tr><td><b>125</b></td><td>25</td><td><b>84</b></td><td>52</td><td>20</td><td>35</td></tr>
+</table>
+<div class="f res"><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mrow><mn>110</mn><mn>,5</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>N</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mi>m</mi><mo lspace="0.17em" rspace="0.17em">≤</mo><mrow><mn>125</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>N</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mi>m</mi><mspace width="0.2em"/><mtext>→</mtext><mspace width="0.2em"/><mtext>CHỌN</mtext><mspace width="0.2em"/><mtext>ĐƯỢC</mtext><mo lspace="0.17em" rspace="0.17em">✔</mo></mrow></math></div><div class="src"><b>[BM]</b> — số liệu thuyết minh mẫu.</div>
+  </div>
+
+<h3>Ba điều kiện bắt buộc khi chọn khớp nối</h3>
+<ol>
+<li>Moment xoắn của khớp nối <b>≥</b> mô-men xoắn tính toán.</li>
+<li>Ø lỗ trong phải <b>khớp với Ø moay – ơ</b> đã chọn ở mục 3.1.4.</li>
+<li>Ø ngoài D₀ phải dùng đúng trong công thức tính lực ở bước 2.</li>
+</ol>
+
+<div class="box">
+<h4>Vật liệu khớp nối</h4>
+<p>Hai nửa nối trục: thép C30. Chốt: thép C45 — vật liệu chốt phải <b>không nhỏ hơn</b> thép nửa nối trục
+để đảm bảo độ bền uốn của chốt.</p>
+</div>
+
+<div class="box wrn">
+<h4>❌ Lỗi 12 thường gặp</h4>
+<p><b>Biểu hiện:</b> chọn khớp nối có moment xoắn nhỏ hơn mô-men làm việc; hoặc dùng luôn Ø lắp ổ
+làm Ø khớp nối mà không kiểm tra lại.<br>
+<b>Cách khắc phục:</b> luôn đối chiếu đủ ba điều kiện trên, kể cả khi bài toán rất đơn giản.</p>
+</div>
+
+<!-- ============ 15 ============ -->
+<h2 id="s15"><span class="no">15.</span>Bảng tra nhanh và tự kiểm chứng</h2>
+
+<div class="box lft">
+<div class="box acc">
+<h4>Ký hiệu nguồn dùng trong tài liệu này</h4>
+<table>
+<tr><th style="width:11%">Ký hiệu</th><th>Tài liệu</th></tr>
+<tr><td><b>[NHL]</b></td><td>Nguyễn Hữu Lộc (2020), <i>Thiết kế máy và chi tiết máy</i>, NXB Khoa học và Kỹ thuật, Hà Nội — bản PDF kèm theo thư mục này. Số trang PDF trùng số trang in, đã đối chiếu từng trang.</td></tr><tr><td><b>[GT]</b></td><td>Giáo trình <i>Thực tập thiết kế chi tiết máy</i>, Bộ môn Cơ khí – Ô tô, Khoa Cơ khí, Trường Đại học Công nghệ Kỹ thuật Vĩnh Long, 2026 (học phần ME6570). Quy ước ứng suất cho phép theo giáo trình này.</td></tr><tr><td><b>[BM]</b></td><td>Thuyết minh mẫu của lớp (tệp <i>bài mẫu.docx</i>) — chỉ dùng đối chiếu, không thay cho công thức gốc.</td></tr>
+</table>
+<p style="font-size:13px;margin-top:8px">Mỗi công thức trong tài liệu đều có dòng
+<b>nguồn</b> ngay bên dưới, ghi rõ <b>mục</b>, <b>số công thức</b> và <b>số trang</b>.
+Khi nộp báo cáo, chép nguyên dòng này vào cuối thuyết minh.</p>
+</div>
+
+<h4>Bảng công thức tóm tắt</h4>
+<table>
+<tr><th style="width:17%">Bước</th><th>Công thức</th><th style="width:25%">Nguồn / trang</th></tr>
+<tr><td>Mô-men xoắn</td><td><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>T</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mrow><mn>9</mn><mspace width="0.15em"/><mn>550</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>P</mi></mrow><mrow><mi>n</mi></mrow></mfrac></mrow></math></td><td class="sc"><b>[NHL]</b> §5.4 <span class="pg">tr. 100</span></td></tr></tr>
+<tr><td>Ø sơ bộ (3.1.2)</td><td><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>d</mi><mo lspace="0.17em" rspace="0.17em">≥</mo><mroot><mrow><mfrac><mrow><mrow><mn>16</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>T</mi></mrow><mrow><mrow><mi>π</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mo fence="true" stretchy="true">[</mo><mrow><mi>τ</mi></mrow><mo fence="true" stretchy="true">]</mo></mrow></mrow></mrow></mfrac></mrow><mrow><mtext>3</mtext></mrow></mroot></mrow></math></td><td class="sc"><b>[NHL]</b> §8.1, <b>(8.2)</b> <span class="pg">tr. 161–162</span></td></tr></tr>
+<tr><td>Lực vòng</td><td><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>F</mi></mrow><mrow><mi>t</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mrow><mn>2</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>T</mi></mrow><mrow><msub><mrow><mi>d</mi></mrow><mrow><mi>m</mi></mrow></msub></mrow></mfrac></mrow></math></td><td class="sc"><b>[NHL]</b> §7.3 <span class="pg">tr. 155</span></td></tr></tr>
+<tr><td>Mô-men uốn tương đương</td><td><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>M</mi></mrow><mrow><mtext>td</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><msqrt><mrow><msup><mrow><msub><mrow><mi>M</mi></mrow><mrow><mi>x</mi></mrow></msub></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup><mo lspace="0.17em" rspace="0.17em">+</mo><msup><mrow><msub><mrow><mi>M</mi></mrow><mrow><mi>y</mi></mrow></msub></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup><mo lspace="0.17em" rspace="0.17em">+</mo><mrow><mn>0</mn><mn>,75</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><msup><mrow><msub><mrow><mi>M</mi></mrow><mrow><mi>t</mi></mrow></msub></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup></mrow></msqrt></mrow></math></td><td class="sc"><b>[NHL]</b> §11.2 mục 3 <span class="pg">tr. 297</span></td></tr></tr>
+<tr><td>Ø thiết kế (3.1.4)</td><td><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>d</mi><mo lspace="0.17em" rspace="0.17em">≥</mo><mroot><mrow><mfrac><mrow><mrow><mn>32</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>M</mi></mrow><mrow><mtext>td</mtext></mrow></msub></mrow><mrow><mrow><mi>π</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mo fence="true" stretchy="true">[</mo><mrow><mi>σ</mi></mrow><mo fence="true" stretchy="true">]</mo></mrow></mrow></mrow></mfrac></mrow><mrow><mtext>3</mtext></mrow></mroot></mrow></math></td><td class="sc"><b>[NHL]</b> <b>(11.26)</b> <span class="pg">tr. 297–298</span></td></tr></tr>
+<tr><td>Ứng suất tĩnh (3.1.7)</td><td><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>σ</mi></mrow><mrow><mi>t</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><msub><mrow><mi>K</mi></mrow><mrow><mi>σ</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>32</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>M</mi></mrow><mrow><mtext>max</mtext></mrow></msub></mrow><mrow><mrow><mi>π</mi><mo lspace="0.17em" rspace="0.17em">·</mo><msup><mrow><mi>d</mi></mrow><mrow><mrow><mn>3</mn></mrow></mrow></msup></mrow></mrow></mfrac><mo lspace="0.17em" rspace="0.17em">≤</mo><mrow><mo fence="true" stretchy="true">[</mo><mrow><mi>σ</mi></mrow><mo fence="true" stretchy="true">]</mo></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi></mi></mrow><mrow><mtext>tĩnh</mtext></mrow></msub></mrow></math></td><td class="sc"><b>[GT]</b> mục 3.1.7; dạng đầy đủ <b>(11.25)</b> <span class="pg">tr. 297</span></td></tr></tr>
+<tr><td>Độ võng (3.1.8)</td><td><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>f</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mi>F</mi><mo lspace="0.17em" rspace="0.17em">·</mo><msup><mrow><mi>L</mi></mrow><mrow><mrow><mn>3</mn></mrow></mrow></msup></mrow><mrow><mrow><mrow><mn>48</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>E</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mi>I</mi></mrow></mrow></mfrac></mrow></math>; <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>I</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mi>π</mi><mo lspace="0.17em" rspace="0.17em">·</mo><msup><mrow><mi>d</mi></mrow><mrow><mrow><mn>4</mn></mrow></mrow></msup></mrow><mrow><mrow><mn>64</mn></mrow></mrow></mfrac></mrow></math></td><td class="sc"><b>[GT]</b> mục 3.1.8</td></tr></tr>
+<tr><td>Tải ổ tĩnh (3.2.3)</td><td><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>Q</mi></mrow><mrow><mn>0</mn></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><msub><mrow><mi>X</mi></mrow><mrow><mn>0</mn></mrow></msub><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>F</mi></mrow><mrow><mi>r</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">+</mo><msub><mrow><mi>Y</mi></mrow><mrow><mn>0</mn></mrow></msub><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>F</mi></mrow><mrow><mi>a</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">≤</mo><msub><mrow><mi>C</mi></mrow><mrow><mn>0</mn></mrow></msub></mrow></math></td><td class="sc"><b>[NHL]</b> §9.4 <span class="pg">tr. 228</span></td></tr></tr>
+<tr><td>Tải ổ động (3.2.2)</td><td><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>Q</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mi>X</mi><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>F</mi></mrow><mrow><mi>r</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">+</mo><mi>Y</mi><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>F</mi></mrow><mrow><mi>a</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">≤</mo><mi>C</mi></mrow></math></td><td class="sc"><b>[NHL]</b> §9.4 <span class="pg">tr. 228</span></td></tr></tr>
+<tr><td>Then bền dập (3.3)</td><td><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>σ</mi></mrow><mrow><mi>d</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mrow><mn>2</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>T</mi></mrow><mrow><mrow><mi>d</mi><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>t</mi></mrow><mrow><mn>2</mn></mrow></msub><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>l</mi></mrow><mrow><mn>1</mn></mrow></msub></mrow></mrow></mfrac></mrow></math>; <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>t</mi></mrow><mrow><mn>2</mn></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>0</mn><mn>,4</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>h</mi></mrow></math>; <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>l</mi></mrow><mrow><mn>1</mn></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mi>l</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mo lspace="0.17em" rspace="0.17em">−</mo><mi>b</mi></mrow></mrow></math></td><td class="sc"><b>[NHL]</b> §11.3 <span class="pg">tr. 301</span></td></tr></tr>
+<tr><td>Then bền cắt (3.3)</td><td><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>τ</mi></mrow><mrow><mi>c</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mrow><mn>2</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>T</mi></mrow><mrow><mrow><mi>d</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mi>b</mi><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>l</mi></mrow><mrow><mn>1</mn></mrow></msub></mrow></mrow></mfrac></mrow></math></td><td class="sc"><b>[NHL]</b> §11.3 <span class="pg">tr. 301</span></td></tr></tr>
+<tr><td>Khớp nối (3.4)</td><td><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>M</mi></mrow><mrow><mtext>tkn</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>1</mn><mn>,35</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>T</mi></mrow></math>; <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>F</mi></mrow><mrow><mtext>tkn</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mrow><mn>2</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>M</mi></mrow><mrow><mtext>tkn</mtext></mrow></msub></mrow><mrow><msub><mrow><mi>D</mi></mrow><mrow><mn>0</mn></mrow></msub></mrow></mfrac></mrow></math>; <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>F</mi></mrow><mrow><mtext>rkn</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>0</mn><mn>,25</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>F</mi></mrow><mrow><mtext>tkn</mtext></mrow></msub></mrow></math></td><td class="sc"><b>[GT]</b> mục 3.4</td></tr></tr>
+</table>
+</div>
+
+<h3>Bốn phép kiểm chứng độc lập — làm trước khi nộp</h3>
+<div class="gr g4">
+<div class="step"><div class="h">① Mô-men xoắn</div><p><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>T</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mrow><mn>9</mn><mspace width="0.15em"/><mn>550</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>P</mi></mrow><mrow><mi>n</mi></mrow></mfrac></mrow></math> phải khớp với cả ba hàng trong bảng thông số.</p></div>
+<div class="step"><div class="h">② Lực vòng</div><p><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>F</mi></mrow><mrow><mi>t</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mrow><mn>2</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>T</mi></mrow><mrow><msub><mrow><mi>d</mi></mrow><mrow><mi>m</mi></mrow></msub></mrow></mfrac></mrow></math> phải ra cùng kết quả khi dùng <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>T</mi></mrow></math> và <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>d</mi></mrow><mrow><mi>m</mi></mrow></msub></mrow></math> khác nhau.</p></div>
+<div class="step"><div class="h">③ Mô-men cản</div><p><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>σ</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><msub><mrow><mi>M</mi></mrow><mrow><mtext>td</mtext></mrow></msub></mrow><mrow><mrow><mfrac><mrow><mi>π</mi><mo lspace="0.17em" rspace="0.17em">·</mo><msup><mrow><mi>d</mi></mrow><mrow><mrow><mn>3</mn></mrow></mrow></msup></mrow><mrow><mrow><mn>32</mn></mrow></mrow></mfrac></mrow></mrow></mfrac></mrow></math> phải <= [σ]. Đây là kiểm chứng độc lập với công thức lấy căn bậc ba.</p></div>
+<div class="step"><div class="h">④ Lực xiên</div><p><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msup><mrow><msub><mrow><mi>F</mi></mrow><mrow><mtext>rx</mtext></mrow></msub></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup><mo lspace="0.17em" rspace="0.17em">+</mo><msup><mrow><msub><mrow><mi>F</mi></mrow><mrow><mtext>rz</mtext></mrow></msub></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup></mrow></math> phải bằng <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msup><mrow><msub><mrow><mi>F</mi></mrow><mrow><mi>r</mi></mrow></msub></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup></mrow></math>.</p></div>
+</div>
+
+<div class="box wrn">
+<h4>⚠ Hai điểm trong số liệu tham khảu cần bạn tự kiểm lại</h4>
+
+<p><b>(1) Mô-men xoắn trên trục I.</b> Trục I mang T = 81 864 N·mm ở khớp nối
+(970 v/p) và T = 197 153 N·mm tại bánh răng (388 v/p). Số liệu tham khảu dùng giá trị nhỏ hơn
+cho toàn bộ trục I. Nếu lấy T = 197 153 N·mm:</p>
+<div class="f warn"><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mrow><mi>M</mi></mrow><mrow><mtext>tdB</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><msqrt><mrow><msup><mrow><mrow><mn>48</mn><mspace width="0.15em"/><mn>247</mn><mn>,5</mn></mrow></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup><mo lspace="0.17em" rspace="0.17em">+</mo><msup><mrow><mrow><mn>173</mn><mspace width="0.15em"/><mn>579</mn><mn>,9</mn></mrow></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup><mo lspace="0.17em" rspace="0.17em">+</mo><mrow><mn>0</mn><mn>,75</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><msup><mrow><mrow><mn>197</mn><mspace width="0.15em"/><mn>153</mn><mn>,4</mn></mrow></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup></mrow></msqrt><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>248</mn><mspace width="0.15em"/><mn>212</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>N</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mtext>mm</mtext></mrow></math></div><div class="eq cont"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mrow><mi>d</mi></mrow><mrow><mi>B</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">≥</mo><mroot><mrow><mfrac><mrow><mrow><mn>32</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>248</mn><mspace width="0.15em"/><mn>212</mn></mrow></mrow><mrow><mrow><mi>π</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>85</mn></mrow></mrow></mrow></mfrac></mrow><mrow><mtext>3</mtext></mrow></mroot><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>30</mn><mn>,98</mn></mrow><mspace width="0.2em"/><mtext>mm</mtext><mspace width="0.2em"/><mtext>;</mtext><mspace width="0.2em"/><mtext>chọn</mtext><mspace width="0.2em"/><mrow><mn>35</mn></mrow><mspace width="0.2em"/><mtext>mm</mtext><mspace width="0.2em"/><mi>ổ</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>7</mn><mspace width="0.15em"/><mn>207</mn></mrow><mspace width="0.2em"/><mtext>then</mtext><mspace width="0.2em"/><mtext>A 12×8×45</mtext></mrow></math></div><div class="src"><b>[BM]</b> — số liệu thuyết minh mẫu, cần tự kiểm lại (xem mục 19).</div>
+  </div>
+
+<p style="margin-top:10px"><b>(2) Lực vòng của hai bánh răng.</b> Cùng một cặp bánh răng có
+F<sub>t1</sub> ≠ F<sub>t2</sub>, vì <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>F</mi></mrow><mrow><mi>t</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mrow><mn>2</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>T</mi></mrow><mrow><msub><mrow><mi>d</mi></mrow><mrow><mi>m</mi></mrow></msub></mrow></mfrac></mrow></math> và <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>d</mi></mrow><mrow><mtext>m1</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">≠</mo><msub><mrow><mi>d</mi></mrow><mrow><mtext>m2</mtext></mrow></msub></mrow></math>:</p>
+<div class="f warn"><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mrow><mi>F</mi></mrow><mrow><mtext>t1</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mrow><mn>2</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>81</mn><mspace width="0.15em"/><mn>864</mn></mrow></mrow><mrow><mrow><mn>84</mn><mn>,89</mn></mrow></mrow></mfrac><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>1</mn><mspace width="0.15em"/><mn>928</mn><mn>,7</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>N</mi></mrow></math></div><div class="eq"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mrow><mi>F</mi></mrow><mrow><mtext>t2</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mrow><mn>2</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>197</mn><mspace width="0.15em"/><mn>153</mn></mrow></mrow><mrow><mrow><mn>216</mn><mn>,09</mn></mrow></mrow></mfrac><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>1</mn><mspace width="0.15em"/><mn>824</mn><mn>,6</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>N</mi><mspace width="0.2em"/><mtext>→</mtext><mspace width="0.2em"/><mtext>không</mtext><mspace width="0.2em"/><mtext>bằng</mtext><mspace width="0.2em"/><mtext>nhau</mtext></mrow></math></div><div class="src"><b>[BM]</b> — số liệu thuyết minh mẫu, cần tự kiểm lại (xem mục 19).</div>
+  </div>
+
+<p style="margin-top:10px"><b>Cách trình bày khi gặp số liệu không khớp (đây là điểm cộng):</b>
+① Ghi rõ bảng số liệu gốc và công thức đã dùng · ② Chỉ ra bất biến bị vi phạm ·
+③ Nêu nguyên nhân · ④ Đề xuất giá trị đúng và thiết kế lại các đại lượng phụ thuộc.</p>
+</div>
+
+<div class="box navy">
+<h4>Trước khi viết vào báo cáo</h4>
+<p>Tra số hiệu công thức, số trang và tên bảng theo <b>bài giảng [TL]</b> hoặc <b>giáo trình [1]</b>
+mà lớp đang sử dụng. Nếu giáo trình bạn dùng khác đề cương về số hiệu, hãy ghi rõ nguồn bạn đã tra.</p>
+</div>
+
+<!-- ============ 16 ============ -->
+<h2 id="s16"><span class="no">16.</span>Mười hai lỗi thường gặp — tóm tắt một trang</h2>
+
+<table>
+<tr><th style="width:4%">#</th><th style="width:26%">Dạng sai</th><th style="width:31%">Nguyên nhân</th><th style="width:39%">Biện pháp</th></tr>
+<tr><td>1</td><td>Chọn [σ], [τ] sai</td><td>Lấy giá trị biên thay vì giá trị đại diện trong vùng</td><td>Ghi rõ vùng giá trị và lý do chọn trong thuyết minh</td></tr>
+<tr><td>2</td><td>Ø sơ bộ sai số 1000 lần</td><td><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>N</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mi>m</mi></mrow></math> với <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>N</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mtext>mm</mtext></mrow></math></td><td>Viết đơn vị cạnh mọi số thay số; kiểm <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mroot><mrow><mrow><mn>20</mn><mspace width="0.15em"/><mn>845</mn></mrow></mrow><mrow><mtext>3</mtext></mrow></mroot><mo lspace="0.17em" rspace="0.17em">≈</mo><mrow><mn>27</mn><mn>,5</mn></mrow></mrow></math></td></tr>
+<tr><td>3</td><td>Sai đòn tay, mô-men uốn lệch</td><td>Đo lực từ mặt trong thay vì giữa moay – ơ</td><td>Vẽ sơ đồ chiều dài có số đo trước khi tính</td></tr>
+<tr><td>4</td><td>Bỏ qua góc xiên α</td><td>Nhầm β với α</td><td>Kiểm <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msup><mrow><msub><mrow><mi>F</mi></mrow><mrow><mtext>rx</mtext></mrow></msub></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup><mo lspace="0.17em" rspace="0.17em">+</mo><msup><mrow><msub><mrow><mi>F</mi></mrow><mrow><mtext>rz</mtext></mrow></msub></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup><mo lspace="0.17em" rspace="0.17em">=</mo><msup><mrow><msub><mrow><mi>F</mi></mrow><mrow><mi>r</mi></mrow></msub></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup></mrow></math></td></tr>
+<tr><td>5</td><td>Nhầm L₂₁ với L₂₂</td><td>Đọc lộn số đo trên sơ đồ</td><td>Kiểm L₂₁ + L₂₂ = L</td></tr>
+<tr><td>6</td><td>Trục không gia công được</td><td>Ø lắp ổ &lt; Ø thiết kế; moay – ơ chồng lấn; thiếu chỗ khoan tâm</td><td>Kiểm ba điều kiện ở mục 2 trước khi dựng 3D</td></tr>
+<tr><td>7</td><td>Lấy sai hệ số an toàn</td><td>Lấy <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>s</mi></mrow><mrow><mi>σ</mi></mrow></msub></mrow></math> vì lớn hơn</td><td>Luôn lấy <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mtext>min</mtext><mspace width="0.2em"/><mrow><msub><mrow><mi>s</mi></mrow><mrow><mi>σ</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>s</mi></mrow><mrow><mi>τ</mi></mrow></msub></mrow></mrow></math>; kiểm lại ở mặt cắt có rãnh then</td></tr>
+<tr><td>8</td><td>Nhầm <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mrow><mo fence="true" stretchy="true">[</mo><mrow><mi>σ</mi></mrow><mo fence="true" stretchy="true">]</mo></mrow></mrow></math> mỏi và <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mrow><mo fence="true" stretchy="true">[</mo><mrow><mi>σ</mi></mrow><mo fence="true" stretchy="true">]</mo></mrow></mrow></math> tĩnh</td><td>Không thấy đây là hai giá trị khác nhau</td><td>Mỏi: <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mrow><mn>70</mn></mrow><mo lspace="0.17em" rspace="0.17em">÷</mo><mrow><mn>90</mn></mrow></mrow></math> MPa. Tĩnh: <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mrow><mrow><mn>0</mn><mn>,25</mn></mrow><mo lspace="0.17em" rspace="0.17em">÷</mo><mrow><mn>0</mn><mn>,4</mn></mrow></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>σ</mi></mrow><mrow><mi>b</mi></mrow></msub></mrow></math></td></tr>
+<tr><td>9</td><td>Sai độ võng</td><td>Dùng <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>F</mi></mrow><mrow><mi>t</mi></mrow></msub></mrow></math> thay vì hợp lực <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>F</mi></mrow><mrow><mi>r</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><msqrt><mrow><msup><mrow><msub><mrow><mi>F</mi></mrow><mrow><mi>t</mi></mrow></msub></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup><mo lspace="0.17em" rspace="0.17em">+</mo><msup><mrow><msub><mrow><mi>F</mi></mrow><mrow><mi>r</mi></mrow></msub></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup></mrow></msqrt></mrow></math></td><td>Dùng hợp lực làm lực gây võng trong mặt phẳng</td></tr>
+<tr><td>10</td><td>Không tính Q cho ổ</td><td>Chọn ổ theo Ø rồi coi như xong</td><td>Trình bày đủ <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>Q</mi></mrow><mrow><mn>0</mn></mrow></msub><mo lspace="0.17em" rspace="0.17em">≤</mo><msub><mrow><mi>C</mi></mrow><mrow><mn>0</mn></mrow></msub></mrow></math> và <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>Q</mi><mo lspace="0.17em" rspace="0.17em">≤</mo><mi>C</mi></mrow></math></td></tr>
+<tr><td>11</td><td>Then tràn ra ngoài mặt bích</td><td>Lấy <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>l</mi><mo lspace="0.17em" rspace="0.17em">=</mo><msub><mrow><mi>l</mi></mrow><mrow><mtext>moay</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mo lspace="0.17em" rspace="0.17em">−</mo><mi>ơ</mi></mrow></mrow></math>; tra bảng theo Ø sơ bộ</td><td>Rút ngắn 5÷10 mm mỗi đầu; tra theo Ø lắp ghép thật</td></tr>
+<tr><td>12</td><td>Khớp nối không đủ tải</td><td>Không đối chiếu moment xoắn</td><td>Kiểm đủ 3 điều kiện ở mục 14</td></tr>
+</table>
+
+<div class="box acc">
+<p><b>Gợi ý tự học:</b> đọc lại bảng trên, tự đặt câu hỏi cho từng lỗi — "làm sao phát hiện được
+lỗi này trong bài của mình?" — rồi ghi câu trả lời vào phiếu học tập. Đây là phần dễ bị hỏi
+nhất trong phần vấn đáp.</p>
+</div>
+
+<!-- ============ 17 ============ -->
+<h2 id="s17"><span class="no">17.</span>Checklist trước khi nộp bài</h2>
+
+<div class="gr g2">
+<div class="chk">
+<h4>Thuyết minh tính toán</h4>
+<label><input type="checkbox"> Có đủ các mục 3.1.1 → 3.4 theo đúng đề cương</label>
+<label><input type="checkbox"> Mỗi bước có công thức – thay số – kết luận</label>
+<label><input type="checkbox"> Mọi số liệu thay số đều có đơn vị</label>
+<label><input type="checkbox"> Có dòng "kiểm tra ngược" sau mỗi kết luận lớn</label>
+<label><input type="checkbox"> Đã ghi rõ tên bảng đã dùng khi tra số</label>
+<label><input type="checkbox"> Có sơ đồ chiều dài và sơ đồ lực đủ số đo</label>
+<label><input type="checkbox"> Đã đối chiếu với bài mẫu và ghi lại chỗ khác biệt</label>
+</div>
+<div class="chk">
+<h4>Bản vẽ chi tiết trục</h4>
+<label><input type="checkbox"> Ghi đủ vật liệu, số lượng, quy cách</label>
+<label><input type="checkbox"> Có dung sai và nhám bề mặt trên từng mặt đạt yêu cầu</label>
+<label><input type="checkbox"> Có cấp chính xác</label>
+<label><input type="checkbox"> Mọi đường tròn dùng đúng ký hiệu thuộc tâm</label>
+<label><input type="checkbox"> Có dung sai hình dạng và vị trí bề mặt</label>
+<label><input type="checkbox"> Rãnh then và khớp nối vẽ đúng ký hiệu</label>
+<label><input type="checkbox"> Có mô hình 3D khớp với bản vẽ 2D</label>
+</div>
+</div>
+
+<div class="box wrn">
+<h4>⚠ Quy định liêm chính học thuật của đề cương</h4>
+<p>Bài hoặc bài làm bị phát hiện <b>sao chép từ internet trên 30%</b>, hoặc sao chép của nhau,
+sẽ bị trừ <b>100% điểm quá trình</b>. Nếu vi phạm nghiêm trọng (cho nhiều người chép,
+3 người giống nhau trở lên) sẽ không cho kiểm tra cuối kỳ cho cả người sử dụng bài chép
+và người cho chép bài.</p>
+<p style="margin-top:6px">Về việc dùng công cụ AI (đề cương §6.3 và §10.1 cho phép ChatGPT, Gemini, Claude):
+dùng để <b>đối chiếu kết quả và giải thích công thức</b>, không dùng để thay thế việc thiết kế.
+Đây cũng là yêu cầu của Quy định Hội giảng: dùng AI phải có kiểm soát và được giảng viên kiểm chứng.</p>
+</div>
+
+<!-- ============ 18 ============ -->
+
+<!-- ============ 18. INVENTOR ============ -->
+<h2 id="s18"><span class="no">18.</span>Dựng mô hình trục trên Autodesk Inventor 2025 / 2026</h2>
+
+<p>Sau khi đã chốt đường kính và chiều dài các đoạn trục ở mục 3.1.4 và sơ đồ chiều dài ở mục 3.1.5,
+mới bắt đầu dựng mô hình. Dựng mô hình <b>sau</b> khi tính xong là sai thứ tự — sẽ dễ phát sinh mâu thuẫn
+giữa bản vẽ và thuyết minh.</p>
+
+<div class="box lft">
+<h3>Bảy bước dựng trục</h3>
+<table>
+<tr><th style="width:5%">Bước</th><th style="width:26%">Thao tác trong Inventor</th><th>Điểm cần đạt</th></tr>
+<tr><td><b>1</b></td><td>Tạo tệp <b>Part (.ipt)</b>, chọn đơn vị <b>mm</b>, đặt mặt phẳng XY làm mặt phẳng đối xứng</td>
+    <td>Sai đơn vị ngay từ đầu thì mọi kích thước phía sau đều lệch</td></tr>
+<tr><td><b>2</b></td><td>Dựng trục bằng <b>Revolve</b> một nửa mặt cắt qua trục, hoặc <b>Extrude</b> từng đoạn hình trục</td>
+    <td>Mặt cắt phải nằm đúng trên mặt phẳng đi qua trục</td></tr>
+<tr><td><b>3</b></td><td>Vẽ các đoạn theo sơ đồ chiều dài: chiều dài moay – ơ, khoảng cách ổ, các đoạn L</td>
+    <td>Tổng chiều dài phải khớp với sơ đồ chiều dài đã vẽ tay</td></tr>
+<tr><td><b>4</b></td><td>Tạo rãnh then bằng <b>Pocket</b> hoặc <b>Extrude Cut</b> theo ký hiệu then đã chọn ở mục 3.3</td>
+    <td>Rãnh đúng vị trí, đúng chiều rộng b và chiều sâu t₂ = 0,4h</td></tr>
+<tr><td><b>5</b></td><td>Tạo lỗ khoan tâm hai đầu, ren ở đầu trục, rãnh chốt định vị ổ</td>
+    <td>Không khoan tâm tại vị trí có rãnh then</td></tr>
+<tr><td><b>6</b></td><td>Áp vật liệu: <b>Manage → Material</b>, chọn thép 40Cr đã tôi cải thiện</td>
+    <td>Vật liệu hiển thị đúng trên bản vẽ xuất ra</td></tr>
+<tr><td><b>7</b></td><td>Tạo khung bản vẽ: <b>Drawing</b> → <b>ISO A3</b>, đặt kích thước, ghi vật liệu – dung sai – nhám – cấp chính xác</td>
+    <td>Bản vẽ có đủ thông tin để gia công, không phải chỉ có hình học</td></tr>
+</table>
+</div>
+
+<div class="gr g2">
+<div class="box">
+<h4>Phím tắt hay dùng</h4>
+<table>
+<tr><th>Phím</th><th>Tác dụng</th></tr>
+<tr><td><b>Space</b></td><td>Đặt điểm theo đối tượng đang trỏ chuột</td></tr>
+<tr><td><b>K</b></td><td>Hiện bảng ràng buộc khi đặt kích thước</td></tr>
+<tr><td><b>Tab</b></td><td>Chuyển qua lại giữa dạng khái niệm và truy vấn</td></tr>
+<tr><td><b>F6</b></td><td>Cập nhật toàn bộ mô hình</td></tr>
+<tr><td><b>Ctrl + S</b></td><td>Lưu tệp</td></tr>
+</table>
+</div>
+<div class="box wrn">
+<h4>❌ Lỗi thường gặp khi dựng mô hình</h4>
+<p><b>Mô hình khớp với thuyết minh.</b> Sai một kích thước ở mô hình là toàn bộ báo cáo bị nghi ngờ.</p>
+<p><b>Thiếu thông tin gia công.</b> Nhiều bài chỉ xuất hình học, không ghi dung sai, nhám bề mặt
+và cấp chính xác — đây là bản vẽ <b>không gia công được</b>.</p>
+<p><b>Đường tròn không thuộc tâm.</b> Mọi đường tròn phải dùng đúng ký hiệu thuộc tâm theo TCVN.</p>
+</div>
+</div>
+
+<div class="box navy">
+<h4>Đối chiếu 2D – 3D trước khi nộp</h4>
+<p>In bản vẽ 2D, đặt cạnh mô hình 3D và kiểm tra lần lượt: đường kính từng đoạn, chiều dài moay – ơ,
+vị trí rãnh then, vị trí lỗ khoan tâm. Nếu hai bản lệch nhau thì phải tìm ra bên nào sai và sửa bên đó —
+<b>không được sửa thuyết minh cho khớp với mô hình</b>.</p>
+</div>
+
+<h2 id="s15b"><span class="no">19.</span>Tra cứu nhanh: công thức – nguồn – trang</h2>
+<div class="box lft">
+<h4>Danh mục trích dẫn đã đối chiếu với bản gốc</h4>
+<p style="font-size:13px">Bảng dưới đây ghi công thức, <b>mục</b> và <b>số trang</b> trong bản in gốc (tệp PDF kèm theo thư mục này). Số thứ tự trang PDF trùng số trang in. Dùng bảng này để điền cột “định nghĩa công thức và số trang” trong báo cáo.</p>
+<table>
+<tr><th style="width:23%">Nội dung</th><th style="width:33%">Công thức / thông số</th><th style="width:22%">Mục, công thức, bảng</th><th style="width:9%">Trang</th></tr>
+<tr><td><b>Mục 3.1.2 — Ø sơ bộ theo xoắn tĩnh</b></td><td><code style="font-size:12.5px"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>d</mi><mo lspace="0.17em" rspace="0.17em">≥</mo><mroot><mrow><mfrac><mrow><mrow><mn>16</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>T</mi></mrow><mrow><mrow><mi>π</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mo fence="true" stretchy="true">[</mo><mrow><mi>τ</mi></mrow><mo fence="true" stretchy="true">]</mo></mrow></mrow></mrow></mfrac></mrow><mrow><mtext>3</mtext></mrow></mroot></mrow></math></code></td><td>§8.1, (8.2)</td><td><span class="pg">161–162</span></td></tr><tr><td><b>Mục 3.1.2 — chọn ứng suất xoắn cho phép</b></td><td><code style="font-size:12.5px"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mrow><mo fence="true" stretchy="true">[</mo><mrow><mi>τ</mi></mrow><mo fence="true" stretchy="true">]</mo></mrow><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>0</mn><mn>,3</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mo fence="true" stretchy="true">[</mo><mrow><mi>σ</mi></mrow><mo fence="true" stretchy="true">]</mo></mrow></mrow></math>; nếu điều và đẩu ra thì <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mrow><mo fence="true" stretchy="true">[</mo><mrow><mi>τ</mi></mrow><mo fence="true" stretchy="true">]</mo></mrow><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>20</mn></mrow><mo lspace="0.17em" rspace="0.17em">÷</mo><mrow><mn>25</mn></mrow></mrow></math> MPa, trục trung gian <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mrow><mo fence="true" stretchy="true">[</mo><mrow><mi>τ</mi></mrow><mo fence="true" stretchy="true">]</mo></mrow><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>10</mn></mrow><mo lspace="0.17em" rspace="0.17em">÷</mo><mrow><mn>15</mn></mrow></mrow></math> MPa</code></td><td>§8.1, Bảng 8.1</td><td><span class="pg">162</span></td></tr><tr><td><b>Mục 3.1.2 — chọn ứng suất uốn cho phép</b></td><td><code style="font-size:12.5px">theo Bảng 8.1: 40Cr đã tôi, <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>d</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>30</mn></mrow></mrow></math> mm → <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mrow><mo fence="true" stretchy="true">[</mo><mrow><mi>σ</mi></mrow><mo fence="true" stretchy="true">]</mo></mrow><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>95</mn></mrow></mrow></math> MPa; C45 tôi <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>d</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>30</mn></mrow></mrow></math> mm → <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mrow><mo fence="true" stretchy="true">[</mo><mrow><mi>σ</mi></mrow><mo fence="true" stretchy="true">]</mo></mrow><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>90</mn></mrow></mrow></math> MPa</code></td><td>§8.1, Bảng 8.1</td><td><span class="pg">162</span></td></tr><tr><td><b>Mục 3.1.3 — lực vòng, hướng tâm, dọc trục</b></td><td><code style="font-size:12.5px"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>F</mi></mrow><mrow><mi>t</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mrow><mn>2</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>T</mi></mrow><mrow><msub><mrow><mi>d</mi></mrow><mrow><mi>m</mi></mrow></msub></mrow></mfrac></mrow></math>; <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>F</mi></mrow><mrow><mi>r</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><msub><mrow><mi>F</mi></mrow><mrow><mi>t</mi></mrow></msub><mspace width="0.2em"/><mtext>cos</mtext><mspace width="0.2em"/><mi>δ</mi></mrow></math>; <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>F</mi></mrow><mrow><mi>a</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><msub><mrow><mi>F</mi></mrow><mrow><mi>t</mi></mrow></msub><mspace width="0.2em"/><mtext>tan</mtext><mspace width="0.2em"/><mi>δ</mi></mrow></math>; <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>M</mi></mrow><mrow><mi>a</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><msub><mrow><mi>F</mi></mrow><mrow><mi>a</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>d</mi></mrow><mrow><mi>m</mi></mrow></msub></mrow><mrow><mrow><mn>2</mn></mrow></mrow></mfrac></mrow></math></code></td><td>§7.2, §7.3, Hình 11.3</td><td><span class="pg">151, 155, 290</span></td></tr><tr><td><b>Mục 3.1.3 — mô-men uốn hai mặt phẳng</b></td><td><code style="font-size:12.5px"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>M</mi></mrow><mrow><mi>x</mi></mrow></msub></mrow></math>, <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>M</mi></mrow><mrow><mi>y</mi></mrow></msub></mrow></math> tại mặt cắt nguy hiểm; <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msup><mrow><mi>M</mi></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup><mo lspace="0.17em" rspace="0.17em">=</mo><msup><mrow><msub><mrow><mi>M</mi></mrow><mrow><mi>x</mi></mrow></msub></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup><mo lspace="0.17em" rspace="0.17em">+</mo><msup><mrow><msub><mrow><mi>M</mi></mrow><mrow><mi>y</mi></mrow></msub></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup></mrow></math></code></td><td>Hình 11.3; §11.2 mục 3</td><td><span class="pg">290, 297</span></td></tr><tr><td><b>Mục 3.1.3 — hệ số tải tĩnh và tải động</b></td><td><code style="font-size:12.5px"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>Q</mi></mrow><mrow><mn>0</mn></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><msub><mrow><mi>X</mi></mrow><mrow><mn>0</mn></mrow></msub><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>F</mi></mrow><mrow><mi>r</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">+</mo><msub><mrow><mi>Y</mi></mrow><mrow><mn>0</mn></mrow></msub><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>F</mi></mrow><mrow><mi>a</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">≤</mo><msub><mrow><mi>C</mi></mrow><mrow><mn>0</mn></mrow></msub></mrow></math>; <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>Q</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mi>X</mi><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>F</mi></mrow><mrow><mi>r</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">+</mo><mi>Y</mi><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>F</mi></mrow><mrow><mi>a</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">≤</mo><mi>C</mi></mrow></math></code></td><td>§9.4</td><td><span class="pg">228</span></td></tr><tr><td><b>Mục 3.1.4 — mô-men uốn tương đương</b></td><td><code style="font-size:12.5px"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>M</mi></mrow><mrow><mtext>td</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><msqrt><mrow><msup><mrow><mi>M</mi></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup><mo lspace="0.17em" rspace="0.17em">+</mo><mrow><mn>0</mn><mn>,75</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><msup><mrow><mi>T</mi></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup></mrow></msqrt></mrow></math></code></td><td>§11.2 mục 3</td><td><span class="pg">297</span></td></tr><tr><td><b>Mục 3.1.4 — Ø thiết kế</b></td><td><code style="font-size:12.5px"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>d</mi><mo lspace="0.17em" rspace="0.17em">≥</mo><mroot><mrow><mfrac><mrow><mrow><mn>32</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>M</mi></mrow><mrow><mtext>td</mtext></mrow></msub></mrow><mrow><mrow><mi>π</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mo fence="true" stretchy="true">[</mo><mrow><mi>σ</mi></mrow><mo fence="true" stretchy="true">]</mo></mrow></mrow></mrow></mfrac></mrow><mrow><mtext>3</mtext></mrow></mroot></mrow></math></code></td><td>§11.2 mục 3, (11.26)</td><td><span class="pg">297–298</span></td></tr><tr><td><b>Mục 3.1.4 — trục có rãnh then</b></td><td><code style="font-size:12.5px">tăng thêm <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mrow><mn>5</mn></mrow><mo lspace="0.17em" rspace="0.17em">÷</mo><mrow><mn>10</mn></mrow></mrow></math> % so với Ø trục đặc</code></td><td>§11.2 mục 3</td><td><span class="pg">298</span></td></tr><tr><td><b>Mục 3.1.5 — mô-men cản trục đặc</b></td><td><code style="font-size:12.5px"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>W</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mi>π</mi><mo lspace="0.17em" rspace="0.17em">·</mo><msup><mrow><mi>d</mi></mrow><mrow><mrow><mn>3</mn></mrow></mrow></msup></mrow><mrow><mrow><mn>32</mn></mrow></mrow></mfrac></mrow></math>; <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>W</mi></mrow><mrow><mi>o</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mi>π</mi><mo lspace="0.17em" rspace="0.17em">·</mo><msup><mrow><mi>d</mi></mrow><mrow><mrow><mn>3</mn></mrow></mrow></msup></mrow><mrow><mrow><mn>16</mn></mrow></mrow></mfrac></mrow></math></code></td><td>Bảng 11.2, (11.21)</td><td><span class="pg">292</span></td></tr><tr><td><b>Mục 3.1.5 — mô-men cản trục có rãnh then</b></td><td><code style="font-size:12.5px"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>W</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mi>π</mi><mo lspace="0.17em" rspace="0.17em">·</mo><msup><mrow><mi>d</mi></mrow><mrow><mrow><mn>3</mn></mrow></mrow></msup></mrow><mrow><mfrac><mrow><mrow><mn>32</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mo lspace="0.17em" rspace="0.17em">−</mo><mi>b</mi></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><msup><mrow><mrow><mi>d</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mo lspace="0.17em" rspace="0.17em">−</mo><mi>t</mi></mrow></mrow></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup></mrow><mrow><mrow><mrow><mn>2</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>d</mi></mrow></mrow></mfrac></mrow></mfrac></mrow></math>; <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>W</mi></mrow><mrow><mi>o</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mi>π</mi><mo lspace="0.17em" rspace="0.17em">·</mo><msup><mrow><mi>d</mi></mrow><mrow><mrow><mn>3</mn></mrow></mrow></msup></mrow><mrow><mfrac><mrow><mrow><mn>16</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mo lspace="0.17em" rspace="0.17em">−</mo><mi>b</mi></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><msup><mrow><mrow><mi>d</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mo lspace="0.17em" rspace="0.17em">−</mo><mi>t</mi></mrow></mrow></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup></mrow><mrow><mrow><mrow><mn>2</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>d</mi></mrow></mrow></mfrac></mrow></mfrac></mrow></math></code></td><td>Bảng 11.2, (11.22)</td><td><span class="pg">292</span></td></tr><tr><td><b>Mục 3.1.6 — biến độ của ứng suất</b></td><td><code style="font-size:12.5px">uốn đối xứng: <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>σ</mi></mrow><mrow><mi>a</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><msub><mrow><mi>σ</mi></mrow><mrow><mtext>max</mtext></mrow></msub></mrow></math>, <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>σ</mi></mrow><mrow><mi>m</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>0</mn></mrow></mrow></math>; xoắn mạch động một chiều: <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>τ</mi></mrow><mrow><mi>a</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><msub><mrow><mi>τ</mi></mrow><mrow><mi>m</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><msub><mrow><mi>τ</mi></mrow><mrow><mtext>max</mtext></mrow></msub></mrow><mrow><mrow><mn>2</mn></mrow></mrow></mfrac></mrow></math>; xoắn đối xứng hai chiều: <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>τ</mi></mrow><mrow><mi>m</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>0</mn></mrow></mrow></math>, <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>τ</mi></mrow><mrow><mi>a</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><msub><mrow><mi>τ</mi></mrow><mrow><mtext>max</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mi>T</mi></mrow><mrow><msub><mrow><mi>W</mi></mrow><mrow><mi>o</mi></mrow></msub></mrow></mfrac></mrow></math></code></td><td>(11.18), (11.19), (11.20)</td><td><span class="pg">292</span></td></tr><tr><td><b>Mục 3.1.6 — hệ số an toàn tổng hợp của trục truyền</b></td><td><code style="font-size:12.5px"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>s</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><msub><mrow><mi>s</mi></mrow><mrow><mi>σ</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>s</mi></mrow><mrow><mi>τ</mi></mrow></msub></mrow><mrow><msqrt><mrow><msup><mrow><msub><mrow><mi>s</mi></mrow><mrow><mi>σ</mi></mrow></msub></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup><mo lspace="0.17em" rspace="0.17em">+</mo><msup><mrow><msub><mrow><mi>s</mi></mrow><mrow><mi>τ</mi></mrow></msub></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup></mrow></msqrt></mrow></mfrac></mrow></math></code></td><td>(11.14)</td><td><span class="pg">291</span></td></tr><tr><td><b>Mục 3.1.6 — hệ số an toàn cho phép</b></td><td><code style="font-size:12.5px"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mrow><mo fence="true" stretchy="true">[</mo><mrow><mi>s</mi></mrow><mo fence="true" stretchy="true">]</mo></mrow><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>1</mn><mn>,5</mn></mrow><mo lspace="0.17em" rspace="0.17em">÷</mo><mrow><mn>2</mn><mn>,5</mn></mrow></mrow></math>; nếu <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mrow><mo fence="true" stretchy="true">[</mo><mrow><mi>s</mi></mrow><mo fence="true" stretchy="true">]</mo></mrow><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>2</mn><mn>,5</mn></mrow><mo lspace="0.17em" rspace="0.17em">÷</mo><mrow><mn>3</mn></mrow></mrow></math> thì không cần kiểm độ cứng vững</code></td><td>§11.2</td><td><span class="pg">291</span></td></tr><tr><td><b>Mục 3.1.6 — giới hạn mỏi vật liệu</b></td><td><code style="font-size:12.5px"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>σ</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mn>−1</mn><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mrow><mn>0</mn><mn>,4</mn></mrow><mo lspace="0.17em" rspace="0.17em">÷</mo><mrow><mn>0</mn><mn>,5</mn></mrow></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>σ</mi></mrow><mrow><mi>b</mi></mrow></msub></mrow></math>; <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>τ</mi></mrow><mrow><mi>r</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mrow><mn>0</mn><mn>,22</mn></mrow><mo lspace="0.17em" rspace="0.17em">÷</mo><mrow><mn>0</mn><mn>,25</mn></mrow></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>σ</mi></mrow><mrow><mi>b</mi></mrow></msub></mrow></math> (mẫu thử <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>d</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>7</mn></mrow><mo lspace="0.17em" rspace="0.17em">÷</mo><mrow><mn>10</mn></mrow></mrow></math> mm)</code></td><td>(11.17)</td><td><span class="pg">291</span></td></tr><tr><td><b>Mục 3.1.6 — hệ số nhạy cảm độ nhám</b></td><td><code style="font-size:12.5px">thép carbon trung bình: <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>ψ</mi></mrow><mrow><mi>σ</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>0</mn><mn>,10</mn></mrow></mrow></math>; <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>ψ</mi></mrow><mrow><mi>τ</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>0</mn><mn>,05</mn></mrow></mrow></math></code></td><td>Bảng 11.4</td><td><span class="pg">294</span></td></tr><tr><td><b>Mục 3.1.6 — hệ số kích thước</b></td><td><code style="font-size:12.5px">thép carbon, <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>d</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>30</mn></mrow><mo lspace="0.17em" rspace="0.17em">÷</mo><mrow><mn>40</mn></mrow></mrow></math> mm: <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>ε</mi></mrow><mrow><mi>σ</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>0</mn><mn>,88</mn></mrow></mrow></math>; <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>ε</mi></mrow><mrow><mi>τ</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>0</mn><mn>,81</mn></mrow></mrow></math></code></td><td>Bảng 11.5</td><td><span class="pg">294</span></td></tr><tr><td><b>Mục 3.1.6 — hệ số tăng bền bề mặt</b></td><td><code style="font-size:12.5px">lăn nện: <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>β</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>1</mn><mn>,3</mn></mrow></mrow></math> khi <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>K</mi></mrow><mrow><mi>σ</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">≤</mo><mrow><mn>1</mn><mn>,5</mn></mrow></mrow></math> hoặc <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>β</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>1</mn><mn>,6</mn></mrow></mrow></math> khi <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>K</mi></mrow><mrow><mi>σ</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">&gt;</mo><mrow><mn>1</mn><mn>,5</mn></mrow></mrow></math></code></td><td>Bảng 11.6</td><td><span class="pg">294</span></td></tr><tr><td><b>Mục 3.1.6 — hệ số tập trung ứng suất</b></td><td><code style="font-size:12.5px"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>K</mi></mrow><mrow><mi>σ</mi></mrow></msub></mrow></math>, <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>K</mi></mrow><mrow><mi>τ</mi></mrow></msub></mrow></math> tra theo dạng rãnh (then, ren) và loại chi tiết ghép</code></td><td>Bảng 11.7–11.10</td><td><span class="pg">295–296</span></td></tr><tr><td><b>Mục 3.1.6 — điều kiện cần mở rộng</b></td><td><code style="font-size:12.5px">khi <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>s</mi><mo lspace="0.17em" rspace="0.17em">&lt;</mo><mrow><mo fence="true" stretchy="true">[</mo><mrow><mi>s</mi></mrow><mo fence="true" stretchy="true">]</mo></mrow></mrow></math> phải tăng Ø hoặc đổi vật liệu, nhưng không nên để <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>s</mi></mrow></math> quá lớn</code></td><td>§11.2</td><td><span class="pg">296</span></td></tr><tr><td><b>Mục 3.1.7 — kiểm độ bền tĩnh (quy ước lớp)</b></td><td><code style="font-size:12.5px"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>σ</mi></mrow><mrow><mi>t</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><msub><mrow><mi>K</mi></mrow><mrow><mi>σ</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mn>32</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>M</mi></mrow><mrow><mtext>max</mtext></mrow></msub></mrow><mrow><mrow><mi>π</mi><mo lspace="0.17em" rspace="0.17em">·</mo><msup><mrow><mi>d</mi></mrow><mrow><mrow><mn>3</mn></mrow></mrow></msup></mrow></mrow></mfrac><mo lspace="0.17em" rspace="0.17em">≤</mo><mrow><mo fence="true" stretchy="true">[</mo><mrow><mi>σ</mi></mrow><mo fence="true" stretchy="true">]</mo></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi></mi></mrow><mrow><mtext>tĩnh</mtext></mrow></msub></mrow></math>; <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mrow><mo fence="true" stretchy="true">[</mo><mrow><mi>σ</mi></mrow><mo fence="true" stretchy="true">]</mo></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi></mi></mrow><mrow><mtext>tĩnh</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mrow><mn>0</mn><mn>,25</mn></mrow><mo lspace="0.17em" rspace="0.17em">÷</mo><mrow><mn>0</mn><mn>,4</mn></mrow></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>σ</mi></mrow><mrow><mi>b</mi></mrow></msub></mrow></math></code></td><td>đề cương ME6570 mục 3.1.7</td><td><span class="pg">—</span></td></tr><tr><td><b>Mục 3.1.7 — kiểm độ bền tĩnh (quy ước Nguyễn Hữu Lộc)</b></td><td><code style="font-size:12.5px"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>σ</mi></mrow><mrow><mtext>td</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><msqrt><mrow><msup><mrow><mi>σ</mi></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup><mo lspace="0.17em" rspace="0.17em">+</mo><mrow><mn>3</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><msup><mrow><mi>τ</mi></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup></mrow></msqrt><mo lspace="0.17em" rspace="0.17em">≤</mo><mrow><mo fence="true" stretchy="true">[</mo><mrow><mi>σ</mi></mrow><mo fence="true" stretchy="true">]</mo></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi></mi></mrow><mrow><mtext>qt</mtext></mrow></msub></mrow></math>; <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mrow><mo fence="true" stretchy="true">[</mo><mrow><mi>σ</mi></mrow><mo fence="true" stretchy="true">]</mo></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi></mi></mrow><mrow><mtext>qt</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>0</mn><mn>,8</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>σ</mi></mrow><mrow><mtext>ch</mtext></mrow></msub></mrow></math></code></td><td>(11.25)</td><td><span class="pg">297</span></td></tr><tr><td><b>Mục 3.1.7 — quá tải đột ngột</b></td><td><code style="font-size:12.5px"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>K</mi></mrow><mrow><mn>0</mn></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><msub><mrow><mi>T</mi></mrow><mrow><mtext>max</mtext></mrow></msub></mrow><mrow><mi>T</mi></mrow></mfrac></mrow></math>; <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>M</mi></mrow><mrow><mtext>max</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><msub><mrow><mi>K</mi></mrow><mrow><mn>0</mn></mrow></msub><mo lspace="0.17em" rspace="0.17em">·</mo><msqrt><mrow><msup><mrow><msub><mrow><mi>M</mi></mrow><mrow><mi>x</mi></mrow></msub></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup><mo lspace="0.17em" rspace="0.17em">+</mo><msup><mrow><msub><mrow><mi>M</mi></mrow><mrow><mi>y</mi></mrow></msub></mrow><mrow><mrow><mn>2</mn></mrow></mrow></msup></mrow></msqrt></mrow></math></code></td><td>§11.2 mục 2</td><td><span class="pg">296</span></td></tr><tr><td><b>Mục 3.1.8 — mô-men quán tính và độ võng</b></td><td><code style="font-size:12.5px"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>I</mi><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mi>π</mi><mo lspace="0.17em" rspace="0.17em">·</mo><msup><mrow><mi>d</mi></mrow><mrow><mrow><mn>4</mn></mrow></mrow></msup></mrow><mrow><mrow><mn>64</mn></mrow></mrow></mfrac></mrow></math>; <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>f</mi></mrow><mrow><mtext>max</mtext></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mi>F</mi><mo lspace="0.17em" rspace="0.17em">·</mo><msup><mrow><mi>L</mi></mrow><mrow><mrow><mn>3</mn></mrow></mrow></msup></mrow><mrow><mrow><mrow><mn>48</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>E</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mi>I</mi></mrow></mrow></mfrac><mo lspace="0.17em" rspace="0.17em">≤</mo><mrow><mo fence="true" stretchy="true">[</mo><mrow><mi>f</mi></mrow><mo fence="true" stretchy="true">]</mo></mrow></mrow></math></code></td><td>đề cương mục 3.1.8; $W_o$ theo Bảng 11.2</td><td><span class="pg">— / 292</span></td></tr><tr><td><b>Mục 3.3 — lực dập và lực cắt của then</b></td><td><code style="font-size:12.5px"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>σ</mi></mrow><mrow><mi>d</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mrow><mn>2</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>T</mi></mrow><mrow><mrow><mi>d</mi><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>t</mi></mrow><mrow><mn>2</mn></mrow></msub><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>l</mi></mrow><mrow><mn>1</mn></mrow></msub></mrow></mrow></mfrac></mrow></math>; <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>τ</mi></mrow><mrow><mi>c</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mrow><mn>2</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>T</mi></mrow><mrow><mrow><mi>d</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mi>b</mi><mo lspace="0.17em" rspace="0.17em">·</mo><msub><mrow><mi>l</mi></mrow><mrow><mn>1</mn></mrow></msub></mrow></mrow></mfrac></mrow></math>; <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>t</mi></mrow><mrow><mn>2</mn></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>0</mn><mn>,4</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>h</mi></mrow></math>; <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>l</mi></mrow><mrow><mn>1</mn></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mi>l</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mo lspace="0.17em" rspace="0.17em">−</mo><mi>b</mi></mrow></mrow></math></code></td><td>§11.3</td><td><span class="pg">301</span></td></tr><tr><td><b>Mục 3.3 — lực dập theo bảng then</b></td><td><code style="font-size:12.5px"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>F</mi></mrow><mrow><mi>n</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mrow><mn>6</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>T</mi></mrow><mrow><mrow><mi>b</mi><mo lspace="0.17em" rspace="0.17em">+</mo><mrow><mn>6</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>f</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mi>d</mi></mrow></mrow></mfrac></mrow></math>; <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi>σ</mi></mrow><mrow><mi>d</mi></mrow></msub><mo lspace="0.17em" rspace="0.17em">=</mo><mfrac><mrow><mrow><mn>12</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>T</mi><mo lspace="0.17em" rspace="0.17em">·</mo><msup><mrow><mrow><mn>10</mn></mrow></mrow><mrow><mrow><mn>3</mn></mrow></mrow></msup></mrow><mrow><mrow><mi>b</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mrow><mi>b</mi><mo lspace="0.17em" rspace="0.17em">+</mo><mrow><mn>6</mn></mrow><mo lspace="0.17em" rspace="0.17em">·</mo><mi>f</mi><mo lspace="0.17em" rspace="0.17em">·</mo><mi>d</mi></mrow></mrow></mrow></mfrac><mo lspace="0.17em" rspace="0.17em">≤</mo><mrow><mo fence="true" stretchy="true">[</mo><mrow><msub><mrow><mi>σ</mi></mrow><mrow><mi>d</mi></mrow></msub></mrow><mo fence="true" stretchy="true">]</mo></mrow></mrow></math></code></td><td>(11.29)</td><td><span class="pg">301</span></td></tr><tr><td><b>Mục 3.3 — ứng suất cho phép của then</b></td><td><code style="font-size:12.5px"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mrow><mo fence="true" stretchy="true">[</mo><mrow><msub><mrow><mi>τ</mi></mrow><mrow><mi>c</mi></mrow></msub></mrow><mo fence="true" stretchy="true">]</mo></mrow><mo lspace="0.17em" rspace="0.17em">=</mo><mtext>120 / 90 / 50</mtext><mspace width="0.2em"/><mtext>MPa</mtext></mrow></math> (tĩnh; tĩnh + dập nhẹ; tĩnh + dập mạnh); <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mrow><mo fence="true" stretchy="true">[</mo><mrow><msub><mrow><mi>σ</mi></mrow><mrow><mi>d</mi></mrow></msub></mrow><mo fence="true" stretchy="true">]</mo></mrow><mo lspace="0.17em" rspace="0.17em">=</mo><mrow><mn>50</mn></mrow><mo lspace="0.17em" rspace="0.17em">÷</mo><mrow><mn>70</mn></mrow></mrow></math> MPa cho hộp giảm tốc làm việc liên tục</code></td><td>§11.3</td><td><span class="pg">301</span></td></tr>
+</table>
+</div>
+
+<div class="box wrn">
+<h4>Ba điểm phải ghi rõ khi trích dẫn</h4>
+<ol>
+<li><b>Đơn vị quyết định hệ số 10 hay 10³.</b> Công thức (8.2) và (11.26) trong sách dùng mô-men tính bằng <b>N·m</b> nên có hệ số 10 và 10³. Tài liệu này và thuyết minh mẫu dùng <b>N·mm</b> nên các hệ số này bằng 1. Ghi rõ đơn vị ngay cạnh mỗi phép thay số.</li>
+<li><b>Hai quy ước ứng suất cho phép khác nhau.</b> Giáo trình lớp dùng [σ]<sub>tĩnh</sub> = (0,25 ÷ 0,4)·σ<sub>b</sub>; Nguyễn Hữu Lộc dùng [σ]<sub>qt</sub> = 0,8·σ<sub>ch</sub> <span class="pg">297</span>. Hai giá trị này chênh nhau rất xa — dùng nhầm sẽ kết luận sai. Phải ghi rõ đang theo quy ước nào.</li>
+<li><b>Giới hạn mỏi là một dải, không phải một số.</b> Theo (11.17) <span class="pg">291</span>: σ<sub>−1</sub> = (0,4 ÷ 0,5)σ<sub>b</sub> và τ<sub>r</sub> = (0,22 ÷ 0,25)σ<sub>b</sub>. Muốn an toàn thì lấy cận dưới; lấy cận trên mà không nêu lý do là thiếu cơ sở.</li>
+</ol>
+</div>
+
+<h2 id="s19"><span class="no">20.</span>Tài liệu</h2>
+
+<div class="box lft">
+<h4>Tài liệu chính (theo đề cương §10.2)</h4>
+<p>[TL] <b>Bài giảng Thực tập thiết kế chi tiết máy</b>, Khoa Cơ khí, Trường ĐH CNKT Vĩnh Long, 2026.</p>
+</div>
+
+<div class="box">
+<h4>Sách tài liệu tham khảo (theo đề cương §10.3)</h4>
+<ol>
+<li>GS.TS Nguyễn Hữu Lộc, <b>Giáo trình Cơ sở thiết kế máy</b>, NXB Đại học Quốc gia TP.Hồ Chí Minh,
+tái bản lần 3, 2023.</li>
+<li>Nguyễn Tiến Dũng, <b>Giáo trình Đồ án Chi tiết máy</b> (ấn bản mới), NXB Khoa học và Kỹ thuật, 2021.</li>
+<li>Trần Văn Bình và cộng sự, <b>Giáo trình Đồ án Chi tiết máy – Tập 2</b>,
+NXB Quân đội Nhân dân, 2022.</li>
+<li><b>Giáo trình Đồ án Chi tiết máy</b> – Bộ môn Cơ khí, Khoa Cơ khí – Ô tô,
+Trường Đại học, NXB Đại học Quốc gia Hà Nội, 2023.</li>
+<li>Nguyễn Văn Yến (chủ biên), <b>Giáo trình Đồ án Chi tiết máy – Hệ dẫn động cơ khí và chi tiết máy</b>,
+NXB Giao thông Vận tải, 2024.</li>
+</ol>
+</div>
+
+<div class="box lft">
+<h4>Tệp PDF đã dùng để đối chiếu số trang trích dẫn</h4>
+<p style="font-size:13px">Các số trang nêu trong tài liệu và ở mục 19 là số trang
+<b>bản in</b>. Trong tệp PDF kèm theo, <b>số thứ tự trang PDF trùng với số trang in</b>,
+nên tra cứu được trực tiếp.</p>
+<table>
+<tr><th style="width:56%">Tệp trong thư mục bài học</th><th>Dùng để tra cứu</th></tr>
+<tr><td><code>THIẾT KẾ MÁY VÀ CHI TIẾT MÁY - Nguyễn Hữu Lộc (2020).pdf</code>
+    (745 trang)</td><td><b>[NHL]</b> — nguồn chính của mục 19: §5.4, §7.2, §7.3,
+    §8.1, §8.3, §9.4, §11.2, §11.3 và các Bảng 8.1, 8.2, 11.2, 11.4, 11.5, 11.6,
+    11.7–11.11</td></tr>
+<tr><td><code>Giao trinh thiet ke may Nguyen Huu Loc (2016).pdf</code> (762 trang)</td>
+    <td>Bản in khác của cùng tác giả — dùng để đối chiếu chéo khi số trang lệch</td></tr>
+<tr><td><code>23. ME6297-THUC TAP THIET KE CHI TIET MAY.docx</code> /
+    <code>.pdf</code></td><td><b>[GT]</b> — đề cương học phần, mục 3.1 → 3.4</td></tr>
+<tr><td><code>bài mẫu.docx</code></td><td><b>[BM]</b> — thuyết minh mẫu, chỉ dùng
+    đối chiếu</td></tr>
+</table>
+<p class="note" style="margin-top:8px">Khi tra cứu: mở tệp PDF, dùng thanh điều hướng
+để tới đúng số trang, rồi đối chiếu công thức và giá trị hệ số. Không chép số trang
+mà chưa mở sách kiểm tra.</p>
+</div>
+
+<div class="box navy">
+<h4>Hệ thống học liệu số</h4>
+<p>Hệ thống đào tạo trực tuyến: <b>http://elearning.vlute.edu.vn</b><br>
+Các công cụ AI được đề cương liệt kê: <b>ChatGPT, Gemini, Claude</b></p>
+</div>
+
+<p class="note" style="margin-top:20px">Tài liệu hướng dẫn này biên soạn theo đề cương học phần
+ME6570 – Thực tập thiết kế chi tiết máy, mục 14 – Chương 3, phạm vi các mục 3.1 đến 3.4.
+Các số liệu ví dụ lấy từ bài mẫu thiết kế trạm dẫn động băng tải (đề giao 25-26.HKH-NCH.01).</p>
+
+</main>
+</div>
+<button class="top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ Lên đầu trang</button>
+
+<script>
+// theo doi muc dang chon trong thanh dieu huong
+const secs=[...document.querySelectorAll('h2[id]')];
+const links=[...document.querySelectorAll('nav a[href^="#"]')];
+window.addEventListener('scroll',()=>{
+  let cur=secs[0];
+  for(const s of secs){ if(window.scrollY+120>=s.offsetTop) cur=s; }
+  links.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+cur.id));
+},{passive:true});
+</script>
+</body>
+</html>
